@@ -1,0 +1,132 @@
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+
+import javax.swing.ImageIcon;
+
+public class Login extends JFrame {
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField user;
+	private JPasswordField pass;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Login() {
+		setTitle("Dobrodosli!");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 499);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(0, 0, 786, 462);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(245, 245, 245));
+		panel_1.setBounds(0, 0, 786, 462);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Korisničko ime:");
+		lblNewLabel.setForeground(Color.BLACK);
+		lblNewLabel.setBackground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		lblNewLabel.setBounds(221, 133, 100, 50);
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Lozinka:");
+		lblNewLabel_1.setForeground(Color.BLACK);
+		lblNewLabel_1.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		lblNewLabel_1.setBounds(221, 193, 100, 50);
+		panel_1.add(lblNewLabel_1);
+		
+		user = new JTextField();
+		user.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		user.setBackground(Color.LIGHT_GRAY);
+		user.setBounds(349, 141, 200, 40);
+		panel_1.add(user);
+		user.setColumns(10);
+		
+		pass = new JPasswordField();
+		pass.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		pass.setBackground(Color.LIGHT_GRAY);
+		pass.setBounds(349, 201, 200, 40);
+		panel_1.add(pass);
+		
+		JButton btnNewButton = new JButton("Ulogujte se");
+		btnNewButton.setIcon(null);
+		btnNewButton.setForeground(Color.BLACK);
+		btnNewButton.setBackground(Color.LIGHT_GRAY);
+		btnNewButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String un=user.getText();
+		        char[] passChar=pass.getPassword();
+		        String pas=new String(passChar);
+
+		        if (un.equals("Doktor")&&pas.equals("1234")) {
+		            JOptionPane.showMessageDialog(null, "Dobrodošli doktore!");
+
+		            // Kreirajte novi objekat JFrame-a za glavnu stranicu
+		            JFrame Menu = new Menu();
+
+		            // Sakrijte trenutni prozor za prijavu
+		            setVisible(false);
+
+		            // Prikazite glavnu stranicu
+		            Menu.setVisible(true);
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Neispravno korisničko ime ili lozinka!");
+		        }
+		    }
+
+		    
+		});
+		btnNewButton.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		btnNewButton.setBounds(406, 269, 85, 30);
+		panel_1.add(btnNewButton);
+		
+		
+		JLabel BackgroundLabel = new JLabel(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\wallpaper2.jpg"));
+		BackgroundLabel.setBounds(0, 0, 786, 462);
+		panel_1.add(BackgroundLabel);
+		
+		
+	
+	
+	}
+}

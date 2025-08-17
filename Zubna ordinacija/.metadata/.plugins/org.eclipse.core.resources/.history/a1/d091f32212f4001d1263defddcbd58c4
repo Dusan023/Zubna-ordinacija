@@ -1,0 +1,59 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+
+public class Login extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Login() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 910, 569);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+	}
+	
+
+	public class JFrameWithBackground {
+	    public static void main(String[] args) {
+	        JFrame frame = new JFrame();
+	        frame.setLayout(null);
+	        
+	        ImageIcon backgroundImage = new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\wallpaper.jpg");
+	        JLabel backgroundLabel = new JLabel(backgroundImage);
+	        backgroundLabel.setBounds(0, 0, backgroundImage.getIconWidth(), backgroundImage.getIconHeight());
+	        
+	        frame.getContentPane().add(backgroundLabel);
+	        frame.setSize(backgroundImage.getIconWidth(), backgroundImage.getIconHeight());
+	        frame.setVisible(true);
+	    }
+	}
+
+
+}
