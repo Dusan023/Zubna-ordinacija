@@ -1,0 +1,64 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.FlowLayout;
+import javax.swing.SpringLayout;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import net.miginfocom.swing.MigLayout;
+
+public class Nov extends JFrame {
+
+	private JPanel contentPane;
+	private JTable table;
+	private JTextField textField;
+	private JTable table_1;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Nov frame = new Nov();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Nov() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1015, 592);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(new MigLayout("", "[85px][96px][1px][][][grow]", "[21px][231px][][][grow]"));
+		
+		JButton btnNewButton = new JButton("New button");
+		contentPane.add(btnNewButton, "cell 0 0,alignx left,aligny top");
+		
+		table = new JTable();
+		contentPane.add(table, "cell 0 1 3 1,alignx left,aligny bottom");
+		
+		textField = new JTextField();
+		contentPane.add(textField, "cell 1 0,alignx left,aligny top");
+		textField.setColumns(10);
+		
+		table_1 = new JTable();
+		contentPane.add(table_1, "cell 3 3 3 2,grow");
+	}
+}

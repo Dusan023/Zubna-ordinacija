@@ -1,0 +1,83 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class Menu extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Menu frame = new Menu();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Menu() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\logo4.png"));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 840, 575);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JButton TerminiButton = new JButton("Termini");
+		TerminiButton.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		TerminiButton.setBorderPainted(false);
+		TerminiButton.setBackground(new Color(247, 192, 132));
+		TerminiButton.setBounds(310, 262, 138, 46);
+		contentPane.add(TerminiButton);
+		
+		JButton KartoniButton = new JButton("Kartoni");
+		
+		// Check if the user is logged in
+		if (SharedDataModel.isLoggedIn()) {
+		    KartoniButton.setEnabled(false); // Disable the button
+		}
+
+		
+		KartoniButton.setBackground(new Color(247, 192, 132));
+		KartoniButton.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		KartoniButton.setBounds(310, 172, 138, 46);
+		KartoniButton.setBorderPainted(false);
+		contentPane.add(KartoniButton);
+		
+		JLabel MenuLabel = new JLabel("Meni");
+		MenuLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		MenuLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		MenuLabel.setBounds(291, 10, 191, 86);
+		contentPane.add(MenuLabel);
+		
+		JLabel BackgroundLabel = new JLabel("");
+		BackgroundLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		BackgroundLabel.setIcon(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\wallpaper2.jpg"));
+		BackgroundLabel.setBounds(0, 0, 826, 538);
+		contentPane.add(BackgroundLabel);
+	}
+}

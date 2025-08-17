@@ -1,0 +1,162 @@
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+
+import javax.swing.ImageIcon;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
+import javax.swing.SwingConstants;
+
+
+public class Login extends JFrame {
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField user;
+	private JPasswordField pass;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Login() {
+		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Logo.png"));
+		setTitle("Dobrodosli u DentalKeep!");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 499);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(0, 0, 786, 462);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(245, 245, 245));
+		panel_1.setBounds(0, 0, 786, 462);
+		panel.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblIme = new JLabel("Korisničko ime:");
+		lblIme.setForeground(Color.BLACK);
+		lblIme.setBackground(Color.WHITE);
+		lblIme.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		lblIme.setBounds(189, 139, 134, 40);
+		panel_1.add(lblIme);
+		
+		JLabel lblLozinka = new JLabel("Lozinka:");
+		lblLozinka.setForeground(Color.BLACK);
+		lblLozinka.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		lblLozinka.setBounds(189, 199, 102, 40);
+		panel_1.add(lblLozinka);
+		
+		user = new JTextField();
+		user.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		user.setBackground(new Color(235, 217, 186));
+		user.setBounds(381, 141, 200, 40);
+		panel_1.add(user);
+		user.setColumns(10);
+		
+		pass = new JPasswordField();
+		pass.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		pass.setBackground(new Color(235, 217, 186));
+		pass.setBounds(381, 201, 200, 40);
+		panel_1.add(pass);
+		
+		JButton btnLogin = new JButton("Ulogujte se");
+		btnLogin.setIcon(null);
+		btnLogin.setForeground(Color.BLACK);
+		btnLogin.setBackground(new Color(235, 217, 186));
+		btnLogin.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String un=user.getText();
+		        char[] passChar=pass.getPassword();
+		        String pas=new String(passChar);
+
+		        if (un.equals("Doktor")&&pas.equals("1234")) {
+		            JOptionPane.showMessageDialog(null, "Dobrodošli doktore!");
+
+		            JFrame Menu = new Menu();
+
+		            setVisible(false);
+
+		            Menu.setVisible(true);
+		        }
+		        
+		        else if (un.equals("Recepcioner")&&pas.equals("1234")) {
+		            
+		            SharedDataModel.setLoggedIn(true);
+		            
+		            JOptionPane.showMessageDialog(null, "Dobrodošli!");
+		            
+		            JFrame Menu = new Menu();
+
+		            setVisible(false);
+
+		            Menu.setVisible(true);
+
+		        }
+		        
+		        else {
+		            JOptionPane.showMessageDialog(null, "Neispravno korisničko ime ili lozinka!");
+		        }
+		    }
+
+		    
+		});
+		
+		getRootPane().setDefaultButton(btnLogin);
+		
+		btnLogin.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+		btnLogin.setBounds(298, 272, 148, 30);
+		panel_1.add(btnLogin);
+		
+		JLabel lblUlogujteSe = new JLabel("Ulogujte se");
+		lblUlogujteSe.setForeground(new Color(221, 221, 221));
+		lblUlogujteSe.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUlogujteSe.setFont(new Font("Garamond", Font.BOLD, 40));
+		lblUlogujteSe.setBounds(242, 10, 295, 58);
+		panel_1.add(lblUlogujteSe);
+		
+		
+		JLabel lblPozadina = new JLabel(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\LoginWallpaper.jpg"));
+		lblPozadina.setBounds(0, 0, 786, 462);
+		panel_1.add(lblPozadina);
+		
+		
+	
+	
+	}
+}

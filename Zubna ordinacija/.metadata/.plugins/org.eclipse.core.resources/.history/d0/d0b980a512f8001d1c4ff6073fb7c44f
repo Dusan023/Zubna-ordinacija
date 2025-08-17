@@ -1,0 +1,123 @@
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
+
+public class Dialog extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+	private final JLabel lblPozadina = new JLabel("");
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		try {
+			Dialog dialog = new Dialog();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public Dialog() {
+		setResizable(false);
+		setTitle("Pažnja!");
+		setAlwaysOnTop(true);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Logo.png"));
+		setBounds(100, 100, 450, 300);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		{
+			JLabel lblKonfirmacija2 = new JLabel("želite da izađete?");
+			lblKonfirmacija2.setHorizontalAlignment(SwingConstants.CENTER);
+			lblKonfirmacija2.setFont(new Font("Times New Roman", Font.BOLD, 40));
+			lblKonfirmacija2.setBounds(10, 82, 426, 62);
+			contentPanel.add(lblKonfirmacija2);
+		}
+		{
+			JLabel lbkKonfirmacija1 = new JLabel("Da li ste sigurni da");
+			lbkKonfirmacija1.setFont(new Font("Times New Roman", Font.BOLD, 40));
+			lbkKonfirmacija1.setHorizontalAlignment(SwingConstants.CENTER);
+			lbkKonfirmacija1.setBounds(31, 37, 395, 62);
+			contentPanel.add(lbkKonfirmacija1);
+		}
+		{
+			JLabel lblNewLabel_1 = new JLabel("");
+			lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Attention_icon.png"));
+			lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel_1.setBounds(10, 48, 46, 40);
+			contentPanel.add(lblNewLabel_1);
+		}
+		lblPozadina.setIcon(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\BackgroundMenu.jpg"));
+		lblPozadina.setBounds(0, 0, 436, 268);
+		contentPanel.add(lblPozadina);
+		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBackground(new Color(128, 128, 128));
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			{
+				JButton btnDa = new JButton("Da");
+				btnDa.setFocusPainted(false);
+				btnDa.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						SharedDataModel.setLoggedIn(false);
+						Login LoginProzor = new Login();
+						LoginProzor.setLocationRelativeTo(null);
+						LoginProzor.setVisible(true);;
+						dispose();
+						getRootPane().setDefaultButton(btnDa);
+						
+					}
+				});
+				btnDa.setBackground(new Color(128, 255, 128));
+				btnDa.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+				btnDa.setActionCommand("OK");
+				buttonPane.add(btnDa);
+				getRootPane().setDefaultButton(btnDa);
+			}
+			{
+				JButton btnNe = new JButton("Ne");
+				btnNe.setFocusPainted(false);
+				btnNe.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						JFrame Menu = new Menu();
+						Menu.setLocationRelativeTo(null);
+
+			            setVisible(false);
+
+			            Menu.setVisible(true);
+						
+					}
+				});
+				btnNe.setBackground(new Color(255, 128, 128));
+				btnNe.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+				btnNe.setActionCommand("Cancel");
+				buttonPane.add(btnNe);
+			}
+		}
+	}
+
+}

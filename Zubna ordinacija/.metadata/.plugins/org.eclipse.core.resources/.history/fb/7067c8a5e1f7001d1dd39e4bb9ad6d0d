@@ -1,0 +1,118 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Font;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class Menu extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Menu frame = new Menu();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Menu() {
+		setTitle("DentalKeep - Meni");
+		setResizable(false);
+		setBackground(new Color(255, 255, 255));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Logo.png"));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 840, 575);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JButton btnTermini = new JButton("Termini");
+		btnTermini.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				Termini TerminiProzor = new Termini();
+				TerminiProzor.setVisible(true);
+				dispose();
+			
+			}
+		});
+		btnTermini.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+		btnTermini.setBorderPainted(false);
+		btnTermini.setBackground(new Color(247, 192, 132));
+		btnTermini.setBounds(310, 262, 138, 46);
+		contentPane.add(btnTermini);
+		
+		JButton btnKartoni = new JButton("Kartoni");
+		
+		// Check if the user is logged in
+		if (SharedDataModel.isLoggedIn()) {
+		    btnKartoni.setEnabled(false); // Disable the button
+		}
+		
+		btnKartoni.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				Kartoni KartoniProzor = new Kartoni();
+				KartoniProzor.setVisible(true);
+				dispose();
+			
+			}
+		});
+		
+		btnKartoni.setBackground(new Color(247, 192, 132));
+		btnKartoni.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+		btnKartoni.setBounds(310, 172, 138, 46);
+		contentPane.add(btnKartoni);
+		
+		JLabel lblMeni = new JLabel("Meni");
+		lblMeni.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMeni.setFont(new Font("Garamond", Font.BOLD, 40));
+		lblMeni.setBounds(291, 10, 191, 86);
+		contentPane.add(lblMeni);
+		
+		JButton btnLogout = new JButton("Izlogujte se");
+		btnLogout.setBackground(new Color(255, 128, 128));
+		btnLogout.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SharedDataModel.setLoggedIn(false);
+				Login LoginProzor = new Login();
+				LoginProzor.setVisible(true);
+				dispose();
+				
+			}
+		});
+		btnLogout.setBounds(10, 482, 138, 46);
+		contentPane.add(btnLogout);
+		
+		JLabel lblPozadina = new JLabel("");
+		lblPozadina.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		lblPozadina.setIcon(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\BackgroundMenu.jpg"));
+		lblPozadina.setBounds(0, 0, 826, 538);
+		contentPane.add(lblPozadina);
+	}
+}

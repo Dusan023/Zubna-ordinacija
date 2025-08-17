@@ -1,0 +1,325 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JSeparator;
+import javax.swing.SpinnerDateModel;
+import java.util.Date;
+import java.util.Calendar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class Termini extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtIme;
+	private JTextField txtPrezime;
+	private JTextField txtJMBG;
+	private JTextField txtBrojTelefona;
+	private JTextField txtUsluga;
+	private JTextField txtNapomena;
+	private JLabel lblIme;
+	private JLabel lblPrezime;
+	private JLabel lblJMBG;
+	private JLabel lblBrojTelefona;
+	private JLabel lblUsluga;
+	private JLabel lblNapomena;
+	private JLabel lblVremePoetka;
+	private JLabel lblVremeKraja;
+	private JLabel lblInformacije1;
+	private JLabel lblInformacije2;
+	private JButton btnSacuvaj;
+	private JTable tblTermini;
+	private JTextField txtPocetak;
+	private JTextField txtKraj;
+	private JTextField txtDatum;
+	private JLabel lblDatum;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Termini frame = new Termini();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Termini() {
+		setTitle("DentalKeep - Termini");
+		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Logo.png"));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1280, 720);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JButton btnNazad = new JButton("Nazad");
+		btnNazad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Menu MenuProzor = new Menu();
+				MenuProzor.setLocationRelativeTo(null);
+				MenuProzor.setVisible(true);
+				dispose();
+				
+			}
+		});
+		
+		lblDatum = new JLabel("Datum");
+		lblDatum.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDatum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblDatum.setBounds(902, 143, 128, 35);
+		contentPane.add(lblDatum);
+		
+		txtDatum = new JTextField();
+		txtDatum.setHorizontalAlignment(SwingConstants.CENTER);
+		txtDatum.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtDatum.setColumns(10);
+		txtDatum.setBackground(new Color(235, 217, 186));
+		txtDatum.setBounds(902, 188, 128, 35);
+		contentPane.add(txtDatum);
+		btnNazad.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		btnNazad.setBackground(new Color(255, 128, 128));
+		btnNazad.setBounds(10, 627, 138, 46);
+		contentPane.add(btnNazad);
+		
+		JLabel lblTermini = new JLabel("Termini");
+		lblTermini.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTermini.setFont(new Font("Garamond", Font.BOLD, 50));
+		lblTermini.setBounds(471, 10, 239, 59);
+		contentPane.add(lblTermini);
+		
+		JSeparator separatorGore = new JSeparator();
+		separatorGore.setBounds(0, 67, 1266, 2);
+		contentPane.add(separatorGore);
+		
+		JSeparator separatorDole = new JSeparator();
+		separatorDole.setBounds(-21, 335, 1287, 2);
+		contentPane.add(separatorDole);
+		
+		txtIme = new JTextField();
+		txtIme.setHorizontalAlignment(SwingConstants.CENTER);
+		txtIme.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtIme.setColumns(10);
+		txtIme.setBackground(new Color(235, 217, 186));
+		txtIme.setBounds(50, 188, 128, 35);
+		contentPane.add(txtIme);
+		
+		txtPrezime = new JTextField();
+		txtPrezime.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPrezime.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtPrezime.setColumns(10);
+		txtPrezime.setBackground(new Color(235, 217, 186));
+		txtPrezime.setBounds(188, 188, 128, 35);
+		contentPane.add(txtPrezime);
+		
+		txtJMBG = new JTextField();
+		txtJMBG.setHorizontalAlignment(SwingConstants.CENTER);
+		txtJMBG.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtJMBG.setColumns(10);
+		txtJMBG.setBackground(new Color(235, 217, 186));
+		txtJMBG.setBounds(50, 290, 128, 35);
+		contentPane.add(txtJMBG);
+		
+		txtBrojTelefona = new JTextField();
+		txtBrojTelefona.setHorizontalAlignment(SwingConstants.CENTER);
+		txtBrojTelefona.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtBrojTelefona.setColumns(10);
+		txtBrojTelefona.setBackground(new Color(235, 217, 186));
+		txtBrojTelefona.setBounds(188, 290, 128, 35);
+		contentPane.add(txtBrojTelefona);
+		
+		txtUsluga = new JTextField();
+		txtUsluga.setHorizontalAlignment(SwingConstants.CENTER);
+		txtUsluga.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtUsluga.setColumns(10);
+		txtUsluga.setBackground(new Color(235, 217, 186));
+		txtUsluga.setBounds(532, 290, 128, 35);
+		contentPane.add(txtUsluga);
+		
+		txtNapomena = new JTextField();
+		txtNapomena.setHorizontalAlignment(SwingConstants.CENTER);
+		txtNapomena.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtNapomena.setColumns(10);
+		txtNapomena.setBackground(new Color(235, 217, 186));
+		txtNapomena.setBounds(721, 290, 128, 35);
+		contentPane.add(txtNapomena);
+		
+		lblIme = new JLabel("Ime");
+		lblIme.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIme.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblIme.setBounds(50, 143, 128, 35);
+		contentPane.add(lblIme);
+		
+		lblPrezime = new JLabel("Prezime");
+		lblPrezime.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrezime.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblPrezime.setBounds(188, 143, 128, 35);
+		contentPane.add(lblPrezime);
+		
+		lblJMBG = new JLabel("JMBG");
+		lblJMBG.setHorizontalAlignment(SwingConstants.CENTER);
+		lblJMBG.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblJMBG.setBounds(50, 245, 128, 35);
+		contentPane.add(lblJMBG);
+		
+		lblBrojTelefona = new JLabel("Broj Telefona");
+		lblBrojTelefona.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBrojTelefona.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblBrojTelefona.setBounds(188, 245, 128, 35);
+		contentPane.add(lblBrojTelefona);
+		
+		lblUsluga = new JLabel("Vrsta Usluge");
+		lblUsluga.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsluga.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblUsluga.setBounds(532, 245, 128, 35);
+		contentPane.add(lblUsluga);
+		
+		lblNapomena = new JLabel("Napomena");
+		lblNapomena.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNapomena.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblNapomena.setBounds(721, 245, 128, 35);
+		contentPane.add(lblNapomena);
+		
+		lblVremePoetka = new JLabel("Vreme početka");
+		lblVremePoetka.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVremePoetka.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblVremePoetka.setBounds(532, 143, 128, 35);
+		contentPane.add(lblVremePoetka);
+		
+		lblVremeKraja = new JLabel("Vreme kraja");
+		lblVremeKraja.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVremeKraja.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		lblVremeKraja.setBounds(721, 143, 128, 35);
+		contentPane.add(lblVremeKraja);
+		
+		lblInformacije1 = new JLabel("Informacije o pacijentu");
+		lblInformacije1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInformacije1.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 25));
+		lblInformacije1.setBounds(20, 87, 330, 46);
+		contentPane.add(lblInformacije1);
+		
+		lblInformacije2 = new JLabel("Informacije o tretmanu");
+		lblInformacije2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblInformacije2.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 25));
+		lblInformacije2.setBounds(627, 79, 320, 54);
+		contentPane.add(lblInformacije2);
+		
+		btnSacuvaj = new JButton("Sačuvaj");
+		getRootPane().setDefaultButton(btnSacuvaj);
+		btnSacuvaj.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String JMBG=txtJMBG.getText();
+
+		        if (JMBG.length()==13) {
+				
+				DefaultTableModel model = (DefaultTableModel) tblTermini.getModel();
+				model.addRow(new Object[] {
+						txtIme.getText(), txtPrezime.getText(), txtJMBG.getText(), txtBrojTelefona.getText(), txtDatum.getText(), txtPocetak.getText(), 
+						txtKraj.getText(), txtUsluga.getText(), txtNapomena.getText(),
+						
+				});
+				
+				txtIme.setText("");
+				txtPrezime.setText("");
+				txtJMBG.setText("");
+				txtBrojTelefona.setText("");
+				txtDatum.setText("");
+				txtPocetak.setText("");
+				txtKraj.setText("");
+				txtUsluga.setText("");
+				txtNapomena.setText("");
+				
+		        }
+		        
+		        else {
+		            JOptionPane.showMessageDialog(null, "Neispravan unos JMBG-a!");
+		        }
+			}
+		});
+				
+		btnSacuvaj.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		btnSacuvaj.setBackground(new Color(128, 255, 128));
+		btnSacuvaj.setBounds(1098, 279, 138, 46);
+		contentPane.add(btnSacuvaj);
+		
+		tblTermini = new JTable();
+		tblTermini.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Ime", "Prezime", "JMBG", "Broj Telefona", "Datum", "Vreme početka", "Vreme kraja", "Vrsta Usluge", "Napomena"
+			}
+		));
+		tblTermini.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		tblTermini.setEnabled(false);
+		tblTermini.setRowSelectionAllowed(false);
+		tblTermini.setBackground(new Color(235, 217, 186));
+		tblTermini.setBounds(34, 360, 1191, 236);
+		contentPane.add(tblTermini);
+		tblTermini.setFillsViewportHeight(true);
+		
+		tblTermini.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		tblTermini.setAutoCreateRowSorter(true);
+		
+		
+		JScrollPane scrollPaneTermini = new JScrollPane(tblTermini);
+		scrollPaneTermini.setEnabled(false);
+		scrollPaneTermini.setBounds(10, 366, 1235, 246);
+		scrollPaneTermini.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		scrollPaneTermini.setBackground(new Color(235, 217, 186));
+		contentPane.add(scrollPaneTermini);
+		
+		txtPocetak = new JTextField();
+		txtPocetak.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPocetak.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtPocetak.setColumns(10);
+		txtPocetak.setBackground(new Color(235, 217, 186));
+		txtPocetak.setBounds(532, 188, 128, 35);
+		contentPane.add(txtPocetak);
+		
+		txtKraj = new JTextField();
+		txtKraj.setHorizontalAlignment(SwingConstants.CENTER);
+		txtKraj.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 15));
+		txtKraj.setColumns(10);
+		txtKraj.setBackground(new Color(235, 217, 186));
+		txtKraj.setBounds(721, 188, 128, 35);
+		contentPane.add(txtKraj);
+		
+		JLabel lblPozadina = new JLabel("");
+		lblPozadina.setIcon(new ImageIcon("C:\\Users\\Alen LAPTOP\\Desktop\\Zubna ordinacija\\ZubnaOrdinacija\\src\\resources\\Wallpaper.jpg"));
+		lblPozadina.setBounds(0, 0, 1266, 683);
+		contentPane.add(lblPozadina);
+	}
+
+}
