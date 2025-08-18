@@ -1,6 +1,0 @@
-INDEX VERSION 1.131+C:\Users\Alen LAPTOP\Desktop\Zubna ordinacija\.metadata\.plugins\org.eclipse.jdt.core
-2633619313.index
-4072334888.index
-1865797976.index
-2171850410.index
-1759915006.index
