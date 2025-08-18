@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SlojPodataka.Klase;
 using SlojServisa;
 
 namespace Zubna_Ordinacija_WPF.Prozori
@@ -39,17 +40,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
-            DataRowView dr = dg.SelectedItem as DataRowView;
-            if (dr != null)
+            if (DataGrid.SelectedItem is Lek lek)
             {
-
-                TextboxIdLeka.Text = dr["IDLeka"].ToString();
-                TextboxNaziv.Text = dr["Naziv"].ToString();
-                TextboxProizvodjac.Text = dr["Proizvodjac"].ToString();
-                TextboxJacina.Text = dr["Jacina"].ToString();
-                TextboxDoziranje.Text = dr["Doziranje"].ToString();
-
+                TextboxIdLeka.Text = lek.IDLeka.ToString();
+                TextboxNaziv.Text = lek.Naziv;
+                TextboxProizvodjac.Text = lek.Proizvodjac;
+                TextboxJacina.Text = lek.Jacina;
+                TextboxDoziranje.Text = lek.Doziranje;
             }
         }
         private void binDataGrid()
@@ -60,45 +57,34 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "INSERT INTO [Lek](Naziv, Proizvodjac, Jacina, Doziranje) VALUES(@Naziv, @Proizvodjac, @Jacina, @Doziranje)";
-            command.Parameters.AddWithValue("@Naziv", TextboxNaziv.Text);
-            command.Parameters.AddWithValue("@Proizvodjac", TextboxProizvodjac.Text);
-            command.Parameters.AddWithValue("@Jacina", TextboxJacina.Text);
-            command.Parameters.AddWithValue("@Doziranje", TextboxDoziranje.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var lek = new Lek
             {
-                MessageBox.Show("Podaci su uspešno upisani");
-                binDataGrid();
-            }
+                Naziv = TextboxNaziv.Text,
+                Proizvodjac = TextboxProizvodjac.Text,
+                Jacina = TextboxJacina.Text,
+                Doziranje = TextboxDoziranje.Text
+            };
+            LekPravila uradi = new LekPravila();
+
+            uradi.DodajLek(lek);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "UPDATE [Lek] SET  Naziv=@Naziv, Proizvodjac=@Proizvodjac, Jacina=@Jacina, Doziranje=@Doziranje WHERE IDLeka=@IDLeka";
-            command.Parameters.AddWithValue("@IDLeka", TextboxIdLeka.Text);
-            command.Parameters.AddWithValue("@Naziv", TextboxNaziv.Text);
-            command.Parameters.AddWithValue("@Proizvodjac", TextboxProizvodjac.Text);
-            command.Parameters.AddWithValue("@Jacina", TextboxJacina.Text);
-            command.Parameters.AddWithValue("@Doziranje", TextboxDoziranje.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var lek = new Lek
             {
-                MessageBox.Show("Podaci su uspešno izmenjeni!");
-                binDataGrid();
-            }
+                IDLeka = int.Parse(TextboxIdLeka.Text),
+                Naziv = TextboxNaziv.Text,
+                Proizvodjac = TextboxProizvodjac.Text,
+                Jacina = TextboxJacina.Text,
+                Doziranje = TextboxDoziranje.Text
+            };
+
+            LekPravila izmeni = new LekPravila();
+            izmeni.IzmeniLek(lek);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
@@ -114,19 +100,10 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "DELETE FROM [Lek] WHERE IDLeka = @IDLeka";
-            command.Parameters.AddWithValue("@IDLeka", TextboxIdLeka.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
-            {
-                MessageBox.Show("Podaci su uspešno izbrisani!");
-                binDataGrid();
-            }
+            int id = int.Parse(TextboxIdLeka.Text);
+            LekPravila izbrisi = new LekPravila();
+            izbrisi.ObrisiLek(id);
+            binDataGrid();
             ponistiUnosTxt();
         }
     }
