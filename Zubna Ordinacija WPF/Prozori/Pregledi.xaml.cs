@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Klase;
+using SlojServisa;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,10 +24,11 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Pregledi : Window
     {
+        private readonly PregledPravila _pregledRepo;
         public Pregledi()
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _pregledRepo = new PregledPravila();
             binDataGrid();
         }
 
@@ -38,106 +41,51 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
-            DataRowView dr = dg.SelectedItem as DataRowView;
-            string match = "", match2 = "";
-            int x = 0;
-            if (dr != null)
-            {
-                match = dr["idLeka"].ToString();
-                match2 = dr["idLeka"].ToString();
+            var pregled = DataGrid.SelectedItem as Pregled;
+            if (pregled == null) return;
 
-            }
-            // If the search string is empty set to begining of textBox
-            int lastMatch = 0;
-            bool found = true;
-            while (found)
-            {
-                if (ComboboxLek.Items.Count == x)
-                {
-                    ComboboxLek.SelectedIndex = lastMatch;
-                    found = false;
-                }
-                else
-                {
-                    ComboboxLek.SelectedIndex = x;
-                    match = ComboboxLek.SelectedValue.ToString();
-                    if (match.Contains(match2))
-                    {
-                        lastMatch = x;
-                        found = false;
-                    }
-                    x++;
-                }
-            }
-            if (dr != null)
-            {
+            // Postavi ComboBox na lek koji odgovara IDLeka
+            ComboboxLek.SelectedValue = pregled.IDLeka.ToString();
 
-                TextboxIdPregleda.Text = dr["IDPregleda"].ToString();
-                DatepickerDatumSledecePosete.Text = dr["DatumSledecePosete"].ToString();
-                TextboxIdTermina.Text = dr["IDTermina"].ToString();
-
-            }
+            // Popuni polja
+            TextboxIdPregleda.Text = pregled.IDPregleda.ToString();
+            DatepickerDatumSledecePosete.SelectedDate = pregled.DatumSledecePosete;
+            TextboxIdTermina.Text = pregled.IDTermina.ToString();
         }
         private void binDataGrid()
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "SELECT * FROM [Pregled]";
-            command.Connection = connection;
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable("Pregled");
-            dataAdapter.Fill(dataTable);
-            DataGrid.ItemsSource = dataTable.DefaultView;
+            DataGrid.ItemsSource = _pregledRepo.VratiSvePreglede();
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
-            string Lek = ComboboxLek.Text;
-            string[] podaciLeka = Lek.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            DateTime datum = Convert.ToDateTime(DatepickerDatumSledecePosete.Text);
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "INSERT INTO [Pregled](DatumSledecePosete, IDTermina, IDLeka) VALUES(@DatumSledecePosete, @IDTermina, @IDLeka)";
-            command.Parameters.AddWithValue("@DatumSledecePosete", datum);
-            command.Parameters.AddWithValue("@IDTermina", TextboxIdTermina.Text);
-            command.Parameters.AddWithValue("@IDLeka", podaciLeka[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var pregled = new Pregled
             {
-                MessageBox.Show("Podaci su uspešno upisani");
-                binDataGrid();
-            }
+                DatumSledecePosete = DateTime.Parse(DatepickerDatumSledecePosete.Text),
+                IDTermina = int.Parse(TextboxIdTermina.Text),
+                IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
+        };
+
+            var selectedValue = ComboboxLek.SelectedValue;
+            //MessageBox.Show($"SelectedValue: {selectedValue}, Type: {selectedValue?.GetType()}");
+
+            _pregledRepo.DodajPregled(pregled);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            string Lek = ComboboxLek.Text;
-            string[] podaciLeka = Lek.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            DateTime datum = Convert.ToDateTime(DatepickerDatumSledecePosete.Text);
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "UPDATE [Pregled] SET  DatumSledecePosete=@DatumSledecePosete, IDTermina=@IDTermina, IDLeka=@IDLeka WHERE IDPregleda=@IDPregleda";
-            command.Parameters.AddWithValue("@IDPregleda", TextboxIdPregleda.Text);
-            command.Parameters.AddWithValue("@DatumSledecePosete", datum);
-            command.Parameters.AddWithValue("@IDTermina", TextboxIdTermina.Text);
-            command.Parameters.AddWithValue("@IDLeka", podaciLeka[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var pregled = new Pregled
             {
-                MessageBox.Show("Podaci su uspešno izmenjeni!");
-                binDataGrid();
-            }
+                IDPregleda = int.Parse(TextboxIdPregleda.Text),
+                DatumSledecePosete = DateTime.Parse(DatepickerDatumSledecePosete.Text),
+                IDTermina = int.Parse(TextboxIdTermina.Text),
+                IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
+            };
+
+            _pregledRepo.IzmeniPregled(pregled);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
@@ -152,41 +100,20 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "DELETE FROM [Pregled] WHERE IDPregleda = @IDPregleda";
-            command.Parameters.AddWithValue("@IDPregleda", TextboxIdPregleda.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
-            {
-                MessageBox.Show("Podaci su uspešno izbrisani!");
-                binDataGrid();
-            }
+            int id = int.Parse(TextboxIdPregleda.Text);
+            _pregledRepo.ObrisiPregled(id);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ComboboxLek_Loaded(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand commandCbx = new SqlCommand();
-            commandCbx.CommandText = "SELECT * FROM [Lek] ORDER BY IDLeka";
-            commandCbx.Connection = connection;
-            SqlDataAdapter dataAdapterCbx = new SqlDataAdapter(commandCbx);
-            DataTable dataTableCbx = new DataTable("Lek");
-            dataAdapterCbx.Fill(dataTableCbx);
-            string IDLeka, Naziv;
-            for (int i = 0; i < dataTableCbx.Rows.Count; i++)
-            {
-                IDLeka = dataTableCbx.Rows[i]["IDLeka"].ToString();
-                Naziv = dataTableCbx.Rows[i]["Naziv"].ToString();
-                ComboboxLek.Items.Add(IDLeka + "-" + Naziv);
-            }
+            LekPravila pravila = new LekPravila();
+            var lekovi = pravila.VratiSveLekove(); // tvoj servisni sloj
+
+            ComboboxLek.ItemsSource = lekovi;
+            ComboboxLek.DisplayMemberPath = "Naziv";     // ono što vidi korisnik
+            ComboboxLek.SelectedValuePath = "IDLeka";
         }
     }
 }
