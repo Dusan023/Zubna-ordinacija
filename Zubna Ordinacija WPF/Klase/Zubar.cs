@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SlojPodataka.Klase
 {
-    public class Zubar
+    public class Zubar 
     {
         public int IDZubara { get; set; }
         public string Ime { get; set; }

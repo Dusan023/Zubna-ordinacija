@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SlojPodataka.Klase
-{
+{//
     public class Pacijenti
 {
     public int IDPacijenta { get; set; }
