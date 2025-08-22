@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="LekPravila.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TerminPravila.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Klase\Klase.csproj">
