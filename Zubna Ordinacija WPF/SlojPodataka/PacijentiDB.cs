@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using SlojPodataka.Klase;
 
-namespace SlojPodataka
+namespace SlojPodataka //
 {
     public class PacijentiDB
     {
