@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Klase;
+using SlojServisa;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,10 +24,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Termini : Window
     {
+        private readonly TerminPravila _terminRepo;
+
         public Termini()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _terminRepo = new TerminPravila();
             binDataGrid();
         }
 
@@ -38,93 +43,21 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
-            DataRowView dr = dg.SelectedItem as DataRowView;
-
-            string match = "", match2 = "";
-            int x = 0;
-            if (dr != null)
+            if (DataGrid.SelectedItem is Termin termin)
             {
-                match = dr["IDZubara"].ToString();
-                match2 = dr["IDZubara"].ToString();
+                TextboxIdTermina.Text = termin.IDTermina.ToString();
+                DatepickerDatum.Text = termin.Datum.ToString("yyyy-MM-dd");
+                TextboxVreme.Text = termin.Vreme.ToString(@"hh\:mm");
+                TextboxVrstaUsluge.Text = termin.VrstaUsluge;
 
-            }
-            // If the search string is empty set to begining of textBox
-            int lastMatch = 0;
-            bool found = true;
-            while (found)
-            {
-                if (ComboboxZubar.Items.Count == x)
-                {
-                    ComboboxZubar.SelectedIndex = lastMatch;
-                    found = false;
-                }
-                else
-                {
-                    ComboboxZubar.SelectedIndex = x;
-                    match = ComboboxZubar.SelectedValue.ToString();
-                    if (match.Contains(match2))
-                    {
-                        lastMatch = x;
-                        found = false;
-                    }
-                    x++;
-                }
-            }
-
-            string match3 = "", match4 = "";
-            int x1 = 0;
-            if (dr != null)
-            {
-                match3 = dr["IDPacijenta"].ToString();
-                match4 = dr["IDPacijenta"].ToString();
-
-            }
-            // If the search string is empty set to begining of textBox
-            int lastMatch1 = 0;
-            bool found1 = true;
-            while (found1)
-            {
-                if (ComboboxPacijent.Items.Count == x1)
-                {
-                    ComboboxPacijent.SelectedIndex = lastMatch1;
-                    found1 = false;
-                }
-                else
-                {
-                    ComboboxPacijent.SelectedIndex = x1;
-                    match3 = ComboboxPacijent.SelectedValue.ToString();
-                    if (match3.Contains(match4))
-                    {
-                        lastMatch1 = x1;
-                        found1 = false;
-                    }
-                    x++;
-                }
-            }
-
-            if (dr != null)
-            {
-                TextboxIdTermina.Text = dr["IDTermina"].ToString();
-                DatepickerDatum.Text = dr["Datum"].ToString();
-                TextboxVreme.Text = dr["Vreme"].ToString();
-                TextboxVrstaUsluge.Text = dr["VrstaUsluge"].ToString();
-                
+                ComboboxPacijent.SelectedValue = termin.IDPacijenta;
+                ComboboxZubar.SelectedValue = termin.IDZubara;
             }
         }
 
         private void binDataGrid()
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "SELECT * FROM [Termin]";
-            command.Connection = connection;
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable("Termin");
-            dataAdapter.Fill(dataTable);
-            DataGrid.ItemsSource = dataTable.DefaultView;
+            DataGrid.ItemsSource = _terminRepo.VratiSveTermine();
         }
 
         private void ponistiUnosTxt()
@@ -140,75 +73,50 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
-            string Zubar = ComboboxZubar.Text;
-            string[] podaciZubara = Zubar.Split('-');
-            string Pacijent = ComboboxPacijent.Text;
-            string[] podaciPacijenta = Pacijent.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            DateTime datum = Convert.ToDateTime(DatepickerDatum.Text);
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "INSERT INTO [Termin] (Datum, Vreme, VrstaUsluge, IDPacijenta, IDZubara) VALUES(@Datum, @Vreme, @VrstaUsluge, @IDPacijenta, @IDZubara)";
-            command.Parameters.AddWithValue("@Datum", datum);
-            command.Parameters.AddWithValue("@Vreme", TextboxVreme.Text);
-            command.Parameters.AddWithValue("@VrstaUsluge", TextboxVrstaUsluge.Text);
-            command.Parameters.AddWithValue("@IDPacijenta", podaciPacijenta[0]);
-            command.Parameters.AddWithValue("@IDZubara", podaciZubara[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            MessageBox.Show($"Pacijent: {ComboboxPacijent.SelectedValue}, Zubar: {ComboboxZubar.SelectedValue}");
+            var noviTermin = new Termin
             {
-                MessageBox.Show("Podaci su uspešno upisani");
-                binDataGrid();
-            }
+                Datum = DateTime.Parse(DatepickerDatum.Text),
+                Vreme = TimeSpan.Parse(TextboxVreme.Text),
+                VrstaUsluge = TextboxVrstaUsluge.Text,
+                IDPacijenta = Convert.ToInt32(ComboboxPacijent.SelectedValue.ToString()),
+                IDZubara = Convert.ToInt32(ComboboxZubar.SelectedValue.ToString())
+            };
+
+            _terminRepo.DodajTermin(noviTermin);
+
+            MessageBox.Show("Podaci su uspešno upisani!");
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "DELETE FROM [Termin] WHERE IDTermina = @IDTermina";
-            command.Parameters.AddWithValue("@IDTermina", TextboxIdTermina.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            if (int.TryParse(TextboxIdTermina.Text, out int id))
             {
-                MessageBox.Show("Podaci su uspešno izbrisani!");
+                _terminRepo.ObrisiTermin(id);
+                MessageBox.Show("Podaci su uspešno obrisani!");
                 binDataGrid();
+                ponistiUnosTxt();
             }
-            ponistiUnosTxt();
         }
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            string Zubar = ComboboxZubar.Text;
-            string[] podaciZubara = Zubar.Split('-');
-            string Pacijent = ComboboxPacijent.Text;
-            string[] podaciPacijenta = Pacijent.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            DateTime datum = Convert.ToDateTime(DatepickerDatum.Text);
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "UPDATE [Termin] SET Datum=@Datum, Vreme=@Vreme, VrstaUsluge=@VrstaUsluge, IDPacijenta=@IDPacijenta, IDZubara=@IDZubara WHERE IDTermina=@IDTermina";
-            command.Parameters.AddWithValue("@IDTermina", TextboxIdTermina.Text);
-            command.Parameters.AddWithValue("@Datum", datum);
-            command.Parameters.AddWithValue("@Vreme", TextboxVreme.Text);
-            command.Parameters.AddWithValue("@VrstaUsluge", TextboxVrstaUsluge.Text);
-            command.Parameters.AddWithValue("@IDPacijenta", podaciPacijenta[0]);
-            command.Parameters.AddWithValue("@IDZubara", podaciZubara[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var termin = new Termin
             {
-                MessageBox.Show("Podaci su uspešno izmenjeni!");
-                binDataGrid();
-            }
+                IDTermina = int.Parse(TextboxIdTermina.Text),
+                Datum = DateTime.Parse(DatepickerDatum.Text),
+                Vreme = TimeSpan.Parse(TextboxVreme.Text),
+                VrstaUsluge = TextboxVrstaUsluge.Text,
+                IDPacijenta = Convert.ToInt32(ComboboxPacijent.SelectedValue),
+                IDZubara = Convert.ToInt32(ComboboxZubar.SelectedValue)
+            };
+
+            _terminRepo.IzmeniTermin(termin);
+
+            MessageBox.Show("Podaci su uspešno izmenjeni!");
+            binDataGrid();
             ponistiUnosTxt();
         }
 
