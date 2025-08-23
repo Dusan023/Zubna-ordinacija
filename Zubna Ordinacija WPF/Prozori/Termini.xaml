@@ -130,7 +130,7 @@
                 <DataGridTextColumn Binding="{Binding IDTermina}" Header="ID termina" Width="*"/>
                 <DataGridTextColumn Binding="{Binding IDPacijenta}" Header="ID pacijenta" Width="*"/>
                 <DataGridTextColumn Binding="{Binding IDZubara}" Header="ID Zubara" Width="*"/>
-                <DataGridTextColumn Binding="{Binding Datum}" Header="Datum" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Datum, StringFormat=\{0:yyyy-MM-dd\}}" Header="Datum" Width="*"/>
                 <DataGridTextColumn Binding="{Binding Vreme}" Header="Vreme" Width="*"/>
                 <DataGridTextColumn Binding="{Binding VrstaUsluge}" Header="Vrsta usluge" Width="*"/>
 

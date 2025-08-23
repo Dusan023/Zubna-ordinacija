@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using SlojPodataka.Klase;
+using SlojServisa;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,10 +25,15 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Pacijenti : Window
     {
+
+        private readonly PacijentPravila _pacijentRepo;
+        private readonly ZubarPravila _zubarRepo;
         public Pacijenti()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _pacijentRepo= new PacijentPravila();
+            _zubarRepo = new ZubarPravila();
             binDataGrid();
         }
 
@@ -38,125 +46,65 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
-            DataRowView dr = dg.SelectedItem as DataRowView;
-
-            string match = "", match2 = "";
-            int x = 0;
-            if (dr != null)
+            if (DataGrid.SelectedItem is SlojPodataka.Klase.Pacijenti pacijent)
             {
-                match = dr["IDZubara"].ToString();
-                match2 = dr["IDZubara"].ToString();
-
-            }
-            // If the search string is empty set to begining of textBox
-            int lastMatch = 0;
-            bool found = true;
-            while (found)
-            {
-                if (ComboboxZubar.Items.Count == x)
-                {
-                    ComboboxZubar.SelectedIndex = lastMatch;
-                    found = false;
-                }
-                else
-                {
-                    ComboboxZubar.SelectedIndex = x;
-                    match = ComboboxZubar.SelectedValue.ToString();
-                    if (match.Contains(match2))
-                    {
-                        lastMatch = x;
-                        found = false;
-                    }
-                    x++;
-                }
-            }
-
-            if (dr != null)
-            {
-
-                TextboxIdPacijenta.Text = dr["IDPacijenta"].ToString();
-                TextboxIme.Text = dr["Ime"].ToString();
-                TextboxPrezime.Text = dr["Prezime"].ToString();
-                TextboxJMBG.Text = dr["JMBG"].ToString();
-                TextboxBrojTelefona.Text = dr["BrojTelefona"].ToString();
-                ComboboxPol.Text = dr["Pol"].ToString();
-                TextboxAlergije.Text = dr["Alergije"].ToString();
-                TextboxTrudnoca.Text = dr["Trudnoca"].ToString();
-                TextboxBrojZuba.Text = dr["BrojZuba"].ToString();
-
+                TextboxIdPacijenta.Text = pacijent.IDPacijenta.ToString();
+                TextboxIme.Text = pacijent.Ime;
+                TextboxPrezime.Text = pacijent.Prezime;
+                TextboxJMBG.Text = pacijent.JMBG;
+                TextboxBrojTelefona.Text = pacijent.BrojTelefona;
+                ComboboxPol.Text = pacijent.Pol;
+                TextboxAlergije.Text = pacijent.Alergije;
+                TextboxTrudnoca.Text = pacijent.Trudnoca ? "Da" : ""; // ili "1"/"" po potrebi
+                TextboxBrojZuba.Text = pacijent.BrojZuba.ToString();
+                ComboboxZubar.SelectedValue = pacijent.IDZubara;
             }
         }
         private void binDataGrid()
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "SELECT * FROM [Pacijent]";
-            command.Connection = connection;
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable("Pacijent");
-            dataAdapter.Fill(dataTable);
-            DataGrid.ItemsSource = dataTable.DefaultView;
+            DataGrid.ItemsSource = _pacijentRepo.VratiSvePacijente();
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
-            string Zubar = ComboboxZubar.Text;
-            string[] podaciZubara = Zubar.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "INSERT INTO [Pacijent](Ime, Prezime, JMBG, BrojTelefona, Pol, Alergije, Trudnoca, BrojZuba, IDZubara) VALUES(@Ime, @Prezime, @JMBG, @BrojTelefona, @Pol, @Alergije, @Trudnoca, @BrojZuba, @IDZubara)";
-            command.Parameters.AddWithValue("@Ime", TextboxIme.Text);
-            command.Parameters.AddWithValue("@Prezime", TextboxPrezime.Text);
-            command.Parameters.AddWithValue("@JMBG", TextboxJMBG.Text);
-            command.Parameters.AddWithValue("@BrojTelefona", TextboxBrojTelefona.Text);
-            command.Parameters.AddWithValue("@Pol", ComboboxPol.Text);
-            command.Parameters.AddWithValue("@Alergije", TextboxAlergije.Text);
-            command.Parameters.AddWithValue("@Trudnoca", TextboxTrudnoca.Text);
-            command.Parameters.AddWithValue("@BrojZuba", TextboxBrojZuba.Text);
-            command.Parameters.AddWithValue("@IDZubara", podaciZubara[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            SlojPodataka.Klase.Pacijenti pacijent = new SlojPodataka.Klase.Pacijenti
             {
-                MessageBox.Show("Podaci su uspešno upisani");
-                binDataGrid();
-            }
-            ponistiUnosTxt();
+                Ime = TextboxIme.Text,
+                Prezime = TextboxPrezime.Text,
+                JMBG = TextboxJMBG.Text,
+                BrojTelefona = TextboxBrojTelefona.Text,
+                Pol = ComboboxPol.Text,
+                Alergije = TextboxAlergije.Text,
+                Trudnoca = string.IsNullOrEmpty(TextboxTrudnoca.Text) ? false : true,  //paziti prilikom ispravke
+                BrojZuba = int.Parse(TextboxBrojZuba.Text),
+                IDZubara = int.Parse(ComboboxZubar.SelectedValue.ToString())
+            };
 
+            _pacijentRepo.DodajPacijenta(pacijent);
+            binDataGrid();
+            ponistiUnosTxt();
         }
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            string Zubar = ComboboxZubar.Text;
-            string[] podaciZubara = Zubar.Split('-');
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "UPDATE [Pacijent] SET  Ime=@Ime, Prezime=@Prezime, JMBG=@JMBG, BrojTelefona=@BrojTelefona, Pol=@Pol, Alergije=@Alergije, Trudnoca=@Trudnoca, BrojZuba=@BrojZuba, IDZubara=@IDZubara WHERE IDPacijenta=@IDPacijenta";
-            command.Parameters.AddWithValue("@IDPacijenta", TextboxIdPacijenta.Text);
-            command.Parameters.AddWithValue("@Ime", TextboxIme.Text);
-            command.Parameters.AddWithValue("@Prezime", TextboxPrezime.Text);
-            command.Parameters.AddWithValue("@JMBG", TextboxJMBG.Text);
-            command.Parameters.AddWithValue("@BrojTelefona", TextboxBrojTelefona.Text);
-            command.Parameters.AddWithValue("@Pol", ComboboxPol.Text);
-            command.Parameters.AddWithValue("@Alergije", TextboxAlergije.Text);
-            command.Parameters.AddWithValue("@Trudnoca", TextboxTrudnoca.Text);
-            command.Parameters.AddWithValue("@BrojZuba", TextboxBrojZuba.Text);
-            command.Parameters.AddWithValue("@IDZubara", podaciZubara[0]);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            var p = new SlojPodataka.Klase.Pacijenti
             {
-                MessageBox.Show("Podaci su uspešno izmenjeni!");
-                binDataGrid();
-            }
+                IDPacijenta = Convert.ToInt32(TextboxIdPacijenta.Text),
+                Ime = TextboxIme.Text,
+                Prezime = TextboxPrezime.Text,
+                JMBG = TextboxJMBG.Text,
+                BrojTelefona = TextboxBrojTelefona.Text,
+                Pol = ComboboxPol.Text,
+                Alergije = TextboxAlergije.Text,
+                Trudnoca = string.IsNullOrEmpty(TextboxTrudnoca.Text) ? false : true,  //paziti prilikom ispravke
+                BrojZuba = int.Parse(TextboxBrojZuba.Text),
+                IDZubara = int.Parse(ComboboxZubar.SelectedValue.ToString())
+            };
+
+            MessageBox.Show(TextboxIdPacijenta.Text);
+
+            _pacijentRepo.IzmeniPacijenta(p);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
@@ -177,41 +125,18 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "DELETE FROM [Pacijent] WHERE IDPacijenta = @IDPacijenta";
-            command.Parameters.AddWithValue("@IDPacijenta", TextboxIdPacijenta.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
-            {
-                MessageBox.Show("Podaci su uspešno izbrisani!");
-                binDataGrid();
-            }
+            int id = Convert.ToInt32(TextboxIdPacijenta.Text);
+            _pacijentRepo.ObrisiPacijenta(id);
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ComboboxZubar_Loaded(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand commandCbx = new SqlCommand();
-            commandCbx.CommandText = "SELECT * FROM [Zubar] ORDER BY IDZubara";
-            commandCbx.Connection = connection;
-            SqlDataAdapter dataAdapterCbx = new SqlDataAdapter(commandCbx);
-            DataTable dataTableCbx = new DataTable("Zubar");
-            dataAdapterCbx.Fill(dataTableCbx);
-            string IDZubara, Ime;
-            for (int i = 0; i < dataTableCbx.Rows.Count; i++)
-            {
-                IDZubara = dataTableCbx.Rows[i]["IDZubara"].ToString();
-                Ime = dataTableCbx.Rows[i]["Ime"].ToString();
-                ComboboxZubar.Items.Add(IDZubara + "-" + Ime);
-            }
+            var zubari = _zubarRepo.VratiSveZubare();
+            ComboboxZubar.ItemsSource = zubari;
+            ComboboxZubar.DisplayMemberPath = "Ime";     // prikaz
+            ComboboxZubar.SelectedValuePath = "IDZubara"; // vrednost
         }
     }
 }

@@ -25,15 +25,20 @@ namespace Zubna_Ordinacija_WPF.Prozori
     public partial class Termini : Window
     {
         private readonly TerminPravila _terminRepo;
+        private readonly ZubarPravila _zubarRepo;
+        private readonly PacijentPravila _pacijentRepo;
 
         public Termini()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _terminRepo = new TerminPravila();
+            _zubarRepo = new ZubarPravila();
+            _pacijentRepo = new PacijentPravila();
             binDataGrid();
         }
 
+      
         private void ButtonNazad_Click(object sender, RoutedEventArgs e)
         {
             Meni menipage = new Meni();
@@ -76,12 +81,14 @@ namespace Zubna_Ordinacija_WPF.Prozori
             MessageBox.Show($"Pacijent: {ComboboxPacijent.SelectedValue}, Zubar: {ComboboxZubar.SelectedValue}");
             var noviTermin = new Termin
             {
-                Datum = DateTime.Parse(DatepickerDatum.Text),
+                Datum = DateTime.Parse(DatepickerDatum.Text).Date,
                 Vreme = TimeSpan.Parse(TextboxVreme.Text),
                 VrstaUsluge = TextboxVrstaUsluge.Text,
                 IDPacijenta = Convert.ToInt32(ComboboxPacijent.SelectedValue.ToString()),
                 IDZubara = Convert.ToInt32(ComboboxZubar.SelectedValue.ToString())
             };
+
+            MessageBox.Show(noviTermin.Datum.ToString() + " " + noviTermin.Vreme.ToString());
 
             _terminRepo.DodajTermin(noviTermin);
 
@@ -122,44 +129,19 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ComboboxZubar_Loaded(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand commandCbx = new SqlCommand();
-            commandCbx.CommandText = "SELECT * FROM [Zubar] ORDER BY IDZubara";
-            commandCbx.Connection = connection;
-            SqlDataAdapter dataAdapterCbx = new SqlDataAdapter(commandCbx);
-            DataTable dataTableCbx = new DataTable("Zubar");
-            dataAdapterCbx.Fill(dataTableCbx);
-            string IDZubara, Ime;
-            for (int i = 0; i < dataTableCbx.Rows.Count; i++)
-            {
-                IDZubara = dataTableCbx.Rows[i]["IDZubara"].ToString();
-                Ime = dataTableCbx.Rows[i]["Ime"].ToString();
-                ComboboxZubar.Items.Add(IDZubara + "-" + Ime);
-            }
+            var zubari = _zubarRepo.VratiSveZubare();
+            ComboboxZubar.ItemsSource = zubari;
+            ComboboxZubar.DisplayMemberPath = "Ime";     // prikaz
+            ComboboxZubar.SelectedValuePath = "IDZubara"; // vrednost
         }
 
         private void ComboboxPacijent_Loaded(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand commandCbx = new SqlCommand();
-            commandCbx.CommandText = "SELECT * FROM [Pacijent] ORDER BY IDPacijenta";
-            commandCbx.Connection = connection;
-            SqlDataAdapter dataAdapterCbx = new SqlDataAdapter(commandCbx);
-            DataTable dataTableCbx = new DataTable("Pacijent");
-            dataAdapterCbx.Fill(dataTableCbx);
-            string IDPacijenta, Ime;
-            for (int i = 0; i < dataTableCbx.Rows.Count; i++)
-            {
-                IDPacijenta = dataTableCbx.Rows[i]["IDPacijenta"].ToString();
-                Ime = dataTableCbx.Rows[i]["Ime"].ToString();
-                ComboboxPacijent.Items.Add(IDPacijenta + "-" + Ime);
-            }
+            var pacijenti = _pacijentRepo.VratiSvePacijente();
+            ComboboxPacijent.ItemsSource = pacijenti;
+            ComboboxPacijent.DisplayMemberPath = "Ime";
+            ComboboxPacijent.SelectedValuePath = "IDPacijenta";
+
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Klase;
+using SlojPodataka.Klase;
+using SlojServisa;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,10 +25,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Zubari : Window
     {
+        private readonly ZubarPravila _zubarPravila;
+
         public Zubari()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _zubarPravila = new ZubarPravila();
             binDataGrid();
         }
 
@@ -38,78 +44,55 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            DataGrid dg = sender as DataGrid;
-            DataRowView dr = dg.SelectedItem as DataRowView;
-            if (dr != null)
+            
+            if (DataGrid.SelectedItem is Zubar zubar)
             {
-
-                TextboxIdZubara.Text = dr["IDZubara"].ToString();
-                TextboxIme.Text = dr["Ime"].ToString();
-                TextboxPrezime.Text = dr["Prezime"].ToString();
-                TextboxJMBG.Text = dr["JMBG"].ToString();
-                TextboxBrojTelefona.Text = dr["BrojTelefona"].ToString();
-                TextboxEmail.Text = dr["Email"].ToString();
-
+                TextboxIdZubara.Text = zubar.IDZubara.ToString();
+                TextboxIme.Text = zubar.Ime;
+                TextboxPrezime.Text = zubar.Prezime;
+                TextboxJMBG.Text = zubar.JMBG;
+                TextboxBrojTelefona.Text = zubar.BrojTelefona;
+                TextboxEmail.Text = zubar.Email;
             }
         }
 
         private void binDataGrid()
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "SELECT * FROM [Zubar]";
-            command.Connection = connection;
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable("Zubar");
-            dataAdapter.Fill(dataTable);
-            DataGrid.ItemsSource = dataTable.DefaultView;
+            DataGrid.ItemsSource = _zubarPravila.VratiSveZubare();
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString =
-            ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "INSERT INTO [Zubar](Ime, Prezime, JMBG, BrojTelefona, Email) VALUES(@Ime, @Prezime, @JMBG, @BrojTelefona, @Email)";
-            command.Parameters.AddWithValue("@Ime", TextboxIme.Text);
-            command.Parameters.AddWithValue("@Prezime", TextboxPrezime.Text);
-            command.Parameters.AddWithValue("@JMBG", TextboxJMBG.Text);
-            command.Parameters.AddWithValue("@BrojTelefona", TextboxBrojTelefona.Text);
-            command.Parameters.AddWithValue("@Email", TextboxEmail.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            Zubar noviZubar = new Zubar
             {
-                MessageBox.Show("Podaci su uspešno upisani");
-                binDataGrid();
-            }
+                Ime = TextboxIme.Text,
+                Prezime = TextboxPrezime.Text,
+                JMBG = TextboxJMBG.Text,
+                BrojTelefona = TextboxBrojTelefona.Text,
+                Email = TextboxEmail.Text
+            };
+
+            _zubarPravila.DodajZubara(noviZubar);
+            MessageBox.Show("Zubar uspešno dodat!");
+            binDataGrid();
             ponistiUnosTxt();
         }
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "UPDATE [Zubar] SET  Ime=@Ime, Prezime=@Prezime, JMBG=@JMBG, BrojTelefona=@BrojTelefona, Email=@Email WHERE IDZubara=@IDZubara";
-            command.Parameters.AddWithValue("@IDZubara", TextboxIdZubara.Text);
-            command.Parameters.AddWithValue("@Ime", TextboxIme.Text);
-            command.Parameters.AddWithValue("@Prezime", TextboxPrezime.Text);
-            command.Parameters.AddWithValue("@JMBG", TextboxJMBG.Text);
-            command.Parameters.AddWithValue("@BrojTelefona", TextboxBrojTelefona.Text);
-            command.Parameters.AddWithValue("@Email", TextboxEmail.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
+            Zubar izmena = new Zubar
             {
-                MessageBox.Show("Podaci su uspešno izmenjeni!");
-                binDataGrid();
-            }
+                IDZubara = Convert.ToInt32(TextboxIdZubara.Text),
+                Ime = TextboxIme.Text,
+                Prezime = TextboxPrezime.Text,
+                JMBG = TextboxJMBG.Text,
+                BrojTelefona = TextboxBrojTelefona.Text,
+                Email = TextboxEmail.Text
+            };
+
+            _zubarPravila.IzmeniZubara(izmena);
+            MessageBox.Show("Podaci su uspešno izmenjeni!");
+            binDataGrid();
             ponistiUnosTxt();
         }
         private void ponistiUnosTxt()
@@ -125,19 +108,10 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection connection = new SqlConnection();
-            connection.ConnectionString = ConfigurationManager.ConnectionStrings["connZubnaOrdinacija"].ConnectionString;
-            connection.Open();
-            SqlCommand command = new SqlCommand();
-            command.CommandText = " alter table Pacijent nocheck constraint all DELETE FROM [Zubar] WHERE IDZubara = @IDZubara alter table Pacijent check constraint all";
-            command.Parameters.AddWithValue("@IDZubara", TextboxIdZubara.Text);
-            command.Connection = connection;
-            int provera = command.ExecuteNonQuery();
-            if (provera == 1)
-            {
-                MessageBox.Show("Podaci su uspešno izbrisani!");
-                binDataGrid();
-            }
+            int id = Convert.ToInt32(TextboxIdZubara.Text);
+            _zubarPravila.ObrisiZubara(id);
+            MessageBox.Show("Zubar uspešno obrisan!");
+            binDataGrid();
             ponistiUnosTxt();
         }
     }

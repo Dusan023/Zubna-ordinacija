@@ -20,7 +20,7 @@ namespace SlojPodataka //
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Pacijenti", conn);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Pacijent", conn);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -49,7 +49,7 @@ namespace SlojPodataka //
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(
-                    @"INSERT INTO Pacijenti (Ime, Prezime, JMBG, BrojTelefona, Pol, Alergije, Trudnoca, BrojZuba, IDZubara) 
+                    @"INSERT INTO Pacijent (Ime, Prezime, JMBG, BrojTelefona, Pol, Alergije, Trudnoca, BrojZuba, IDZubara) 
                       VALUES (@Ime, @Prezime, @JMBG, @BrojTelefona, @Pol, @Alergije, @Trudnoca, @BrojZuba, @IDZubara)", conn);
 
                 cmd.Parameters.AddWithValue("@Ime", pacijent.Ime);
@@ -62,7 +62,12 @@ namespace SlojPodataka //
                 cmd.Parameters.AddWithValue("@BrojZuba", pacijent.BrojZuba);
                 cmd.Parameters.AddWithValue("@IDZubara", pacijent.IDZubara);
 
-                cmd.ExecuteNonQuery();
+                try
+                { cmd.ExecuteNonQuery(); } 
+                catch (Exception e) {
+                    Console.WriteLine(e);
+                }
+                
             }
         }
 
@@ -72,7 +77,7 @@ namespace SlojPodataka //
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(
-                    @"UPDATE Pacijenti
+                    @"UPDATE Pacijent
                       SET Ime=@Ime, Prezime=@Prezime, JMBG=@JMBG, BrojTelefona=@BrojTelefona, Pol=@Pol, 
                           Alergije=@Alergije, Trudnoca=@Trudnoca, BrojZuba=@BrojZuba, IDZubara=@IDZubara 
                       WHERE IDPacijenta=@IDPacijenta", conn);
@@ -88,7 +93,12 @@ namespace SlojPodataka //
                 cmd.Parameters.AddWithValue("@BrojZuba", pacijent.BrojZuba);
                 cmd.Parameters.AddWithValue("@IDZubara", pacijent.IDZubara);
 
-                cmd.ExecuteNonQuery();
+                try
+                { cmd.ExecuteNonQuery(); }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
@@ -97,7 +107,7 @@ namespace SlojPodataka //
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("DELETE FROM Pacijenti WHERE IDPacijenta=@IDPacijenta", conn);
+                SqlCommand cmd = new SqlCommand("DELETE FROM Pacijent WHERE IDPacijenta=@IDPacijenta", conn);
                 cmd.Parameters.AddWithValue("@IDPacijenta", id);
                 cmd.ExecuteNonQuery();
             }
