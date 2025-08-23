@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LekPravila.cs" />
+    <Compile Include="PacijentiPravila.cs" />
     <Compile Include="PregledPravila.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TerminPravila.cs" />
+    <Compile Include="ZubarPravila.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Klase\Klase.csproj">

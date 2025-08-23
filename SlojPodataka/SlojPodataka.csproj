@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LekDB.cs" />
+    <Compile Include="PacijentiDB.cs" />
     <Compile Include="PregledDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TerminDB.cs" />
+    <Compile Include="ZubarDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Klase\Klase.csproj">

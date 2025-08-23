@@ -42,8 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lek.cs" />
+    <Compile Include="Pacijenti.cs" />
     <Compile Include="Pregled.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Termin.cs" />
+    <Compile Include="Zubar.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
