@@ -104,12 +104,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 BrojTelefona = TextboxBrojTelefona.Text,
                 Pol = ComboboxPol.Text,
                 Alergije = TextboxAlergije.Text,
-                Trudnoca = string.IsNullOrEmpty(TextboxTrudnoca.Text) ? false : true,  //paziti prilikom ispravke
+                Trudnoca = _proveriUnosZaTrudnocu.proveraUnosaZaTrudnocu(TextboxTrudnoca.Text),  //paziti prilikom ispravke
                 BrojZuba = int.Parse(TextboxBrojZuba.Text),
                 IDZubara = int.Parse(ComboboxZubar.SelectedValue.ToString())
             };
 
-            MessageBox.Show(TextboxIdPacijenta.Text);
+            //MessageBox.Show(TextboxIdPacijenta.Text);
 
             var poruka = _pacijentRepo.IzmeniPacijenta(p);
             if (!poruka.Uspeh)
