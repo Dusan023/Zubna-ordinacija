@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Klase.Pomocne_klase;
 
 namespace Zubna_Ordinacija_WPF.Prozori
 {
@@ -28,12 +29,14 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private readonly PacijentPravila _pacijentRepo;
         private readonly ZubarPravila _zubarRepo;
+        private readonly InputTrudnocaCheck _proveriUnosZaTrudnocu;
         public Pacijenti()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _pacijentRepo= new PacijentPravila();
             _zubarRepo = new ZubarPravila();
+            _proveriUnosZaTrudnocu = new InputTrudnocaCheck();
             binDataGrid();
         }
 
@@ -55,7 +58,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 TextboxBrojTelefona.Text = pacijent.BrojTelefona;
                 ComboboxPol.Text = pacijent.Pol;
                 TextboxAlergije.Text = pacijent.Alergije;
-                TextboxTrudnoca.Text = pacijent.Trudnoca ? "Da" : ""; // ili "1"/"" po potrebi
+                TextboxTrudnoca.Text = (bool) pacijent.Trudnoca ? "Da" : "Ne"; // ili "1"/"" po potrebi
                 TextboxBrojZuba.Text = pacijent.BrojZuba.ToString();
                 ComboboxZubar.SelectedValue = pacijent.IDZubara;
             }
@@ -75,12 +78,17 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 BrojTelefona = TextboxBrojTelefona.Text,
                 Pol = ComboboxPol.Text,
                 Alergije = TextboxAlergije.Text,
-                Trudnoca = string.IsNullOrEmpty(TextboxTrudnoca.Text) ? false : true,  //paziti prilikom ispravke
+                Trudnoca = _proveriUnosZaTrudnocu.proveraUnosaZaTrudnocu(TextboxTrudnoca.Text),  //paziti prilikom ispravke
                 BrojZuba = int.Parse(TextboxBrojZuba.Text),
                 IDZubara = int.Parse(ComboboxZubar.SelectedValue.ToString())
             };
 
-            _pacijentRepo.DodajPacijenta(pacijent);
+            var poruka = _pacijentRepo.DodajPacijenta(pacijent);
+            if(!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
@@ -103,7 +111,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
             MessageBox.Show(TextboxIdPacijenta.Text);
 
-            _pacijentRepo.IzmeniPacijenta(p);
+            var poruka = _pacijentRepo.IzmeniPacijenta(p);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }

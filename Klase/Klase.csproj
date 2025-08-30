@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Lek.cs" />
     <Compile Include="Pacijenti.cs" />
+    <Compile Include="Obavestenje.cs" />
+    <Compile Include="Pomocne_klase\InputTrudnocaCheck.cs" />
     <Compile Include="Pregled.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Termin.cs" />

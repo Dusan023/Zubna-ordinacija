@@ -112,5 +112,21 @@ namespace SlojPodataka //
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public bool checkIfJMBGExists(string JMBG) {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT TOP 1 * FROM Pacijent WHERE JMBG = @jmbg", conn);
+                cmd.Parameters.AddWithValue("@jmbg", JMBG);
+                SqlDataReader nadjen = cmd.ExecuteReader();
+                
+                if (nadjen.Read())
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
     }
 }

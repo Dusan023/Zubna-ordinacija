@@ -15,7 +15,7 @@ namespace SlojPodataka.Klase
         public string BrojTelefona { get; set; }
         public string Pol { get; set; }
         public string Alergije { get; set; }
-        public bool Trudnoca { get; set; }
+        public bool? Trudnoca { get; set; }
         public int BrojZuba { get; set; }
         public int IDZubara { get; set; }
     }
