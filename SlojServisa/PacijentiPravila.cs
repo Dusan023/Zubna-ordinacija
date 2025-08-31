@@ -42,7 +42,7 @@ namespace SlojServisa //
             var ispravan = ProveraPodatakaPacijenta(pacijent);
 
             if (ispravan.Uspeh)
-                _repo.Insert(pacijent);
+                _repo.Update(pacijent);
 
             return ispravan;
         }
