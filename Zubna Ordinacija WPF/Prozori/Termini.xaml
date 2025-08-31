@@ -140,6 +140,12 @@
         <Label x:Name="LabelaDatum" Content="Datum" HorizontalAlignment="Left" Margin="390,153,0,0" VerticalAlignment="Top" Foreground="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold"/>
         <ComboBox x:Name="ComboboxZubar" HorizontalAlignment="Left" Margin="179,189,0,0" VerticalAlignment="Top" Width="155" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold" Foreground="Black" Height="26" Loaded="ComboboxZubar_Loaded"/>
         <ComboBox x:Name="ComboboxPacijent" HorizontalAlignment="Left" Margin="19,189,0,0" VerticalAlignment="Top" Width="155" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold" Foreground="Black" Height="26" Loaded="ComboboxPacijent_Loaded"/>
+        <ComboBox x:Name="FiltrirajTermineComboBox" HorizontalAlignment="Left" Margin="19,236,0,0" VerticalAlignment="Top" Width="155" Height="26" SelectionChanged="FiltrirajTermineComboBox_SelectionChanged">
+            <ComboBoxItem>Sve</ComboBoxItem>
+            <ComboBoxItem>Danas</ComboBoxItem>
+            <ComboBoxItem>7 dana</ComboBoxItem>
+            <ComboBoxItem>30 dana</ComboBoxItem>
+        </ComboBox>
 
     </Grid>
 </Window>

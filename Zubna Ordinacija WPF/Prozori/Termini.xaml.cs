@@ -63,6 +63,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private void binDataGrid()
         {
             DataGrid.ItemsSource = _terminRepo.VratiSveTermine();
+
         }
 
         private void ponistiUnosTxt()
@@ -141,6 +142,47 @@ namespace Zubna_Ordinacija_WPF.Prozori
             ComboboxPacijent.ItemsSource = pacijenti;
             ComboboxPacijent.DisplayMemberPath = "Ime";
             ComboboxPacijent.SelectedValuePath = "IDPacijenta";
+
+        }
+
+
+        private void FiltrirajTermineComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var izabrano = FiltrirajTermineComboBox.SelectedItem as ComboBoxItem;
+            if (izabrano == null) return;
+
+            string vremenskiPeriod = izabrano.Content.ToString();
+            var view = CollectionViewSource.GetDefaultView(DataGrid.ItemsSource);
+
+            DateTime danas = DateTime.Today;
+            DateTime krajnjiDatum;
+
+            switch (vremenskiPeriod)
+            {
+                case "Danas":
+                    krajnjiDatum = danas;
+                    break;
+
+                case "7 dana":
+                    krajnjiDatum = danas.AddDays(7);
+                    break;
+
+                case "30 dana":
+                    krajnjiDatum = danas.AddDays(30);
+                    break;
+
+                default:
+                    view.Filter = null; // prikazuje sve ako izbor nije validan
+                    return;
+            }
+
+            view.Filter = item =>
+            {
+                var termin = item as Termin;
+                return termin != null &&
+                       termin.Datum.Date >= danas &&
+                       termin.Datum.Date <= krajnjiDatum;
+            };
 
         }
     }
