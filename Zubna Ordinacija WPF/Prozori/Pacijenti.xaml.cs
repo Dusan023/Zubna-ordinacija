@@ -18,6 +18,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Klase.Pomocne_klase;
+using System.Windows.Threading;
+using Klase;
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace Zubna_Ordinacija_WPF.Prozori
 {
@@ -30,6 +34,8 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private readonly PacijentPravila _pacijentRepo;
         private readonly ZubarPravila _zubarRepo;
         private readonly InputTrudnocaCheck _proveriUnosZaTrudnocu;
+
+        private readonly Obavestenje Obavesti; 
         public Pacijenti()
         {
             InitializeComponent();
@@ -37,6 +43,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
             _pacijentRepo= new PacijentPravila();
             _zubarRepo = new ZubarPravila();
             _proveriUnosZaTrudnocu = new InputTrudnocaCheck();
+            Obavesti = new Obavestenje();
             binDataGrid();
         }
 
@@ -151,5 +158,68 @@ namespace Zubna_Ordinacija_WPF.Prozori
             ComboboxZubar.DisplayMemberPath = "Ime";     // prikaz
             ComboboxZubar.SelectedValuePath = "IDZubara"; // vrednost
         }
+
+        private void pretragaPacijenataSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(500); // debounce vreme
+
+            timer.Tick += (s, es) =>
+            {
+                timer.Stop();
+
+                string tekst = pretragaPacijenataSearch.Text.Trim();
+
+                var view = CollectionViewSource.GetDefaultView(DataGrid.ItemsSource);
+
+                // Ako je tekst prazan, resetuj filter
+                if (string.IsNullOrWhiteSpace(tekst))
+                {
+                    view.Filter = null;
+                    return;
+                }
+
+                // Pretraga po JMBG
+                if (Regex.IsMatch(tekst.Trim(), @"^\d{13}$"))
+                {
+                    view.Filter = item =>
+                    {
+                        var pacijent = item as SlojPodataka.Klase.Pacijenti;
+                        return pacijent != null && pacijent.JMBG == tekst;
+                    };
+                }
+                // Pretraga po imenu i/ili prezimenu
+                else if (Regex.IsMatch(tekst, @"^[\p{L}\s-]+$"))
+                {
+                    string[] delovi = tekst.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    view.Filter = item =>
+                    {
+                        var pacijent = item as SlojPodataka.Klase.Pacijenti;
+                        if (pacijent == null) return false;
+
+                        string ime = pacijent.Ime?.ToLowerInvariant() ?? "";
+                        string prezime = pacijent.Prezime?.ToLowerInvariant() ?? "";
+
+                        return delovi.All(deo =>
+                            ime.Contains(deo.ToLowerInvariant()) || prezime.Contains(deo.ToLowerInvariant()));
+                    };
+                }
+                // Neispravan unos
+                else
+                {
+                    MessageBox.Show("Unos mora biti JMBG (13 cifara) ili ime/prezime (slova, razmaci, crtice).", "Neispravan unos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            };
+
+            // Pokreni debounce svaki put kad se tekst promeni
+            timer.Stop();
+            timer.Start();
+
+        }
+
+      
+
     }
 }

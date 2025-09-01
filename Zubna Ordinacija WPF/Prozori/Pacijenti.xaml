@@ -195,6 +195,9 @@
             </DataGrid.Columns>
         </DataGrid>
         <ComboBox x:Name="ComboboxZubar" HorizontalAlignment="Left" Margin="661,236,0,0" VerticalAlignment="Top" Width="155" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold" Foreground="Black" Height="26" Loaded="ComboboxZubar_Loaded"/>
+        <Button x:Name="KartonButton" Content="Prikazi Karton" HorizontalAlignment="Left" Margin="923,106,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="pretragaPacijenataSearch" HorizontalAlignment="Left" Margin="1176,65,0,0" TextWrapping="Wrap" 
+                  VerticalAlignment="Top" Width="200" TextChanged="pretragaPacijenataSearch_TextChanged"/>
 
     </Grid>
 </Window>
