@@ -114,5 +114,36 @@ namespace SlojPodataka
             return list;
 
         }
+
+        public Termin GetTerminWithPregled(int id)
+        {
+            Termin termin = null;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT * FROM Termin WHERE IDTermina = @IDTermina", connection);
+                command.Parameters.AddWithValue("@IDTermina", id);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        termin = new Termin
+                        {
+                            IDTermina = (int)reader["IDTermina"],
+                            Datum = (DateTime)reader["Datum"],
+                            Vreme = (TimeSpan)reader["Vreme"],
+                            VrstaUsluge = reader["VrstaUsluge"].ToString(),
+                            IDPacijenta = (int)reader["IDPacijenta"],
+                            IDZubara = (int)reader["IDZubara"]
+                        };
+                    }
+                }
+            }
+
+            return termin;
+        }
+
     }
 }

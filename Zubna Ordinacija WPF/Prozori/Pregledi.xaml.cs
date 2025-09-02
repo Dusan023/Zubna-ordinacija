@@ -64,12 +64,17 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 DatumSledecePosete = DateTime.Parse(DatepickerDatumSledecePosete.Text),
                 IDTermina = int.Parse(TextboxIdTermina.Text),
                 IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
-        };
+            };
 
             var selectedValue = ComboboxLek.SelectedValue;
             //MessageBox.Show($"SelectedValue: {selectedValue}, Type: {selectedValue?.GetType()}");
 
-            _pregledRepo.DodajPregled(pregled);
+            var poruka = _pregledRepo.DodajPregled(pregled);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
@@ -84,7 +89,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
             };
 
-            _pregledRepo.IzmeniPregled(pregled);
+            var poruka = _pregledRepo.DodajPregled(pregled);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
