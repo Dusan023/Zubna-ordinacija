@@ -25,13 +25,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Zubari : Window
     {
-        private readonly ZubarPravila _zubarPravila;
+        private readonly ZubarPravila _zubarRepo;
 
         public Zubari()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            _zubarPravila = new ZubarPravila();
+            _zubarRepo = new ZubarPravila();
             binDataGrid();
         }
 
@@ -44,7 +44,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void DataGrid_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            
+
             if (DataGrid.SelectedItem is Zubar zubar)
             {
                 TextboxIdZubara.Text = zubar.IDZubara.ToString();
@@ -58,7 +58,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void binDataGrid()
         {
-            DataGrid.ItemsSource = _zubarPravila.VratiSveZubare();
+            DataGrid.ItemsSource = _zubarRepo.VratiSveZubare();
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
@@ -72,8 +72,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 Email = TextboxEmail.Text
             };
 
-            _zubarPravila.DodajZubara(noviZubar);
-            MessageBox.Show("Zubar uspešno dodat!");
+            var poruka = _zubarRepo.DodajZubara(noviZubar);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
@@ -90,8 +94,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 Email = TextboxEmail.Text
             };
 
-            _zubarPravila.IzmeniZubara(izmena);
-            MessageBox.Show("Podaci su uspešno izmenjeni!");
+            var poruka = _zubarRepo.IzmeniZubara(izmena);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
@@ -108,9 +116,21 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
-            int id = Convert.ToInt32(TextboxIdZubara.Text);
-            _zubarPravila.ObrisiZubara(id);
-            MessageBox.Show("Zubar uspešno obrisan!");
+            Zubar obrisi = new Zubar
+            {
+                IDZubara = Convert.ToInt32(TextboxIdZubara.Text),
+                Ime = TextboxIme.Text,
+                Prezime = TextboxPrezime.Text,
+                JMBG = TextboxJMBG.Text,
+                BrojTelefona = TextboxBrojTelefona.Text,
+                Email = TextboxEmail.Text
+            };
+            var poruka = _zubarRepo.ObrisiZubara(obrisi);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
