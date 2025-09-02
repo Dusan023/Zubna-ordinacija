@@ -24,10 +24,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
     /// </summary>
     public partial class Lekovi : Window
     {
+        private readonly LekPravila _lekRepo;
         public Lekovi()
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _lekRepo = new LekPravila();
+            //WindowStartupLocation = WindowStartupLocation.CenterScreen;
             binDataGrid();
         }
 
@@ -66,7 +68,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
             };
             LekPravila uradi = new LekPravila();
 
-            uradi.DodajLek(lek);
+            var poruka = _lekRepo.DodajLek(lek);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
@@ -82,8 +89,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 Doziranje = TextboxDoziranje.Text
             };
 
-            LekPravila izmeni = new LekPravila();
-            izmeni.IzmeniLek(lek);
+            var poruka = _lekRepo.DodajLek(lek);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
