@@ -31,14 +31,14 @@ namespace Zubna_Ordinacija_WPF.Prozori
         public Termini()
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _terminRepo = new TerminPravila();
             _zubarRepo = new ZubarPravila();
             _pacijentRepo = new PacijentPravila();
             binDataGrid();
         }
 
-      
+
         private void ButtonNazad_Click(object sender, RoutedEventArgs e)
         {
             Meni menipage = new Meni();
@@ -89,11 +89,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 IDZubara = Convert.ToInt32(ComboboxZubar.SelectedValue.ToString())
             };
 
-            MessageBox.Show(noviTermin.Datum.ToString() + " " + noviTermin.Vreme.ToString());
-
-            _terminRepo.DodajTermin(noviTermin);
-
-            MessageBox.Show("Podaci su uspešno upisani!");
+            var poruka = _terminRepo.DodajTermin(noviTermin);
+            if (!poruka.Uspeh)
+            {
+                MessageBox.Show(poruka.Poruka);
+                return;
+            }
             binDataGrid();
             ponistiUnosTxt();
         }
