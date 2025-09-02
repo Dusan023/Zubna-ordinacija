@@ -46,6 +46,8 @@ namespace SlojServisa //
 
             return ispravan;
         }
+
+        public Pacijenti vratiPacijentaPoJmbg(string jmbg) => _repo.findPacijent(jmbg);
         public void ObrisiPacijenta(int id) => _repo.Delete(id);
 
         //----------------------------------------------------------------------------------------

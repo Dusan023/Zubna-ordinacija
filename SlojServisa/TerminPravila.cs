@@ -22,5 +22,7 @@ namespace SlojServisa
         public void DodajTermin(Termin termin) => _repo.Insert(termin);
         public void IzmeniTermin(Termin termin) => _repo.Update(termin);
         public void ObrisiTermin(int id) => _repo.Delete(id);
+
+        public List<Termin> DajSveTerminePacijenta(int id) => _repo.GetTerminiFromPacijent(id);
     }
 }

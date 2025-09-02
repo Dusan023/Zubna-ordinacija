@@ -1,0 +1,100 @@
+﻿<Window x:Class="Zubna_Ordinacija_WPF.Prozori.RadnaPovršinaNaPacijenta"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zubna_Ordinacija_WPF.Prozori"
+        mc:Ignorable="d"
+        Title="RadnaPovršinaNaPacijenta" Height="450" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🧑 Podaci o pacijentu -->
+        <GroupBox Header="Podaci o pacijentu" Margin="0,0,0,10">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <Label Name="ImeLabel" Content="Ime" />
+                    <Label Name="PrezimeLabel" Content="Prezime" />
+                    <Label Name="JmbgLabel" Content="JMBG" />
+                    <Label Name="TelefonLabel" Content="Telefon" />
+                    <Label Name="PolLabel" Content="Pol" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label Name="AlergijaLabel" Content="Alergija" />
+                    <Label Name="TrudnocaLabel" Content="Trudnoca" />
+                    <Label Name="BrojZubaLabel" Content="Broj zuba" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- 📅 Termini i pregledi -->
+        <TabControl Grid.Row="1">
+            <!-- Termini -->
+            <TabItem Header="Termini" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <DatePicker Name="dpDatumTermina" Width="150" />
+                        <TextBox Name="txtVremeTermina" Width="150" />
+                        <TextBox Name="txtVrstaUsluge" Width="200" />
+                        <Button Content="Dodaj" Width="50" Margin="10,0,0,0"/>
+                        <Button Content="Izmeni" Width="50" Margin="10,0,0,0"/>
+                        <Button Content="Obrisi" Width="50" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <DataGrid Name="dgTermini" Grid.Row="1" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Datum" Binding="{Binding Datum}" />
+                            <DataGridTextColumn Header="Vrsta usluge" Binding="{Binding VrstaUsluge}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- Pregledi -->
+            <TabItem Header="Pregledi" Height="24" Margin="-2,-2,-2,0" VerticalAlignment="Top">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <DatePicker Name="dpDatumPregleda" Width="150" />
+                        <ComboBox Name="cmbLek" Width="200" />
+                        <Button Content="Dodaj" Width="50" Margin="10,0,0,0"/>
+                        <Button Content="Izmeni" Width="50" Margin="10,0,0,0"/>
+                        <Button Content="Obrisi" Width="50" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <DataGrid Name="dgPregledi" Grid.Row="1" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Datum sledeće posete" Binding="{Binding IDPregleda}" />
+                            <DataGridTextColumn Header="Datum sledeće posete" Binding="{Binding DatumSledecePosete}" />
+                            <DataGridTextColumn Header="Lek" Binding="{Binding IDLeka}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- Izveštaj -->
+            <TabItem Header="Izveštaj">
+                <TextBox Name="txtIzvestaj" Margin="10" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+
+</Window>

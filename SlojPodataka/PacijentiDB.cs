@@ -128,5 +128,38 @@ namespace SlojPodataka //
                 else return false;
             }
         }
+
+        public Pacijenti findPacijent(string JMBG)
+        {
+            var pacijent = new Pacijenti();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT TOP 1 * FROM Pacijent WHERE JMBG = @jmbg", conn);
+                cmd.Parameters.AddWithValue("@jmbg", JMBG);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        pacijent.IDPacijenta = (int)reader["IDPacijenta"];
+                        pacijent.Ime = reader["Ime"].ToString();
+                        pacijent.Prezime = reader["Prezime"].ToString();
+                        pacijent.JMBG = reader["JMBG"].ToString();
+                        pacijent.BrojTelefona = reader["BrojTelefona"].ToString();
+                        pacijent.Pol = reader["Pol"].ToString();
+                        pacijent.Alergije = reader["Alergije"].ToString();
+                        pacijent.Trudnoca = reader["Trudnoca"] != DBNull.Value ? (bool?)reader["Trudnoca"] : null;
+                        pacijent.BrojZuba = reader["BrojZuba"] != DBNull.Value ? (int)reader["BrojZuba"] : 0;
+                        pacijent.IDZubara = reader["IDZubara"] != DBNull.Value ? (int)reader["IDZubara"] : 0;
+
+                        return pacijent;
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 }

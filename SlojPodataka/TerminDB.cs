@@ -1,5 +1,6 @@
 ﻿using Klase;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -94,6 +95,35 @@ namespace SlojPodataka
                 command.Parameters.AddWithValue("@Id", idTermina);
                 command.ExecuteNonQuery();
             }
+        }
+
+        public List<Termin> GetTerminiFromPacijent(int ID)
+        {
+            var list = new List<Termin>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT * FROM Termin where IDPacijenta=@IDPacijenta", connection);
+                command.Parameters.AddWithValue("@IDPacijenta", ID);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new Termin
+                        {
+                            IDTermina = (int)reader["IDTermina"],
+                            Datum = (DateTime)reader["Datum"],
+                            Vreme = (TimeSpan)reader["Vreme"],
+                            VrstaUsluge = reader["VrstaUsluge"].ToString(),
+                            IDPacijenta = (int)reader["IDPacijenta"],
+                            IDZubara = (int)reader["IDZubara"]
+                        });
+                    }
+                }
+            }
+            return list;
+
         }
     }
 }

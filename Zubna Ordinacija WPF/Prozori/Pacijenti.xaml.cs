@@ -219,7 +219,11 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         }
 
-      
+        private void KartonButton_Click(object sender, RoutedEventArgs e)
+        {
+            var prozor = new RadnaPovršinaNaPacijenta();
 
+            prozor.Show();
+        }
     }
 }

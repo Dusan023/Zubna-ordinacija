@@ -87,5 +87,32 @@ namespace SlojPodataka
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<Pregled> GetTerminiFromPacijent(int ID)
+        {
+            var list = new List<Pregled>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT * FROM Pregled where IDTermina=@IDTermina", connection);
+                command.Parameters.AddWithValue("@IDTermina", ID);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(new Pregled
+                        {
+                            IDPregleda = (int)reader["IDPregleda"],
+                            DatumSledecePosete = (DateTime)reader["DatumSledecePosete"],
+                            IDTermina = (int)reader["IDTermina"],
+                            IDLeka = (int)reader["IDLeka"]
+                        });
+                    }
+                }
+            }
+            return list;
+
+        }
     }
 }

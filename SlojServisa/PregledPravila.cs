@@ -23,6 +23,8 @@ namespace SlojServisa
             public void DodajPregled(Pregled pregled) => _repo.Insert(pregled);
             public void IzmeniPregled(Pregled pregled) => _repo.Update(pregled);
             public void ObrisiPregled(int id) => _repo.Delete(id);
-        
+
+        public List<Pregled> DajSvePregledePacijenta(int id) => _repo.GetTerminiFromPacijent(id);
+
     }
 }
