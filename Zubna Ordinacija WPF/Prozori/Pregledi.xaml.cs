@@ -89,7 +89,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
             };
 
-            var poruka = _pregledRepo.DodajPregled(pregled);
+            var poruka = _pregledRepo.IzmeniPregled(pregled);
             if (!poruka.Uspeh)
             {
                 MessageBox.Show(poruka.Poruka);
