@@ -154,7 +154,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ComboboxZubar_Loaded(object sender, RoutedEventArgs e)
         {
-            var zubari = _zubarRepo.VratiSveZubare();
+            var zubari = _zubarRepo.VratiSveAktivneZubare();
             ComboboxZubar.ItemsSource = zubari;
             ComboboxZubar.DisplayMemberPath = "Ime";     // prikaz
             ComboboxZubar.SelectedValuePath = "IDZubara"; // vrednost
