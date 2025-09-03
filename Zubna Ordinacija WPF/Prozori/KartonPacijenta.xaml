@@ -46,14 +46,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <DatePicker Name="dpDatumTermina" Width="150" />
-                        <TextBox Name="txtVremeTermina" Width="150" />
-                        <TextBox Name="txtVrstaUsluge" Width="200" />
-                        <Button Content="Dodaj" Width="50" Margin="10,0,0,0"/>
-                        <Button Content="Izmeni" Width="50" Margin="10,0,0,0"/>
-                        <Button Content="Obrisi" Width="50" Margin="10,0,0,0"/>
-                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10"/>
 
                     <DataGrid Name="dgTermini" Grid.Row="1" AutoGenerateColumns="False">
                         <DataGrid.Columns>
@@ -72,18 +65,12 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <DatePicker Name="dpDatumPregleda" Width="150" />
-                        <ComboBox Name="cmbLek" Width="200" />
-                        <Button Content="Dodaj" Width="50" Margin="10,0,0,0"/>
-                        <Button Content="Izmeni" Width="50" Margin="10,0,0,0"/>
-                        <Button Content="Obrisi" Width="50" Margin="10,0,0,0"/>
-                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10"/>
 
-                    <DataGrid Name="dgPregledi" Grid.Row="1" AutoGenerateColumns="False">
+                    <DataGrid Name="dgPregledi" Grid.Row="1" AutoGenerateColumns="False" SelectionChanged="dgPregledi_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Datum sledeće posete" Binding="{Binding IDPregleda}" />
-                            <DataGridTextColumn Header="Datum sledeće posete" Binding="{Binding DatumSledecePosete}" />
+                            <DataGridTextColumn Header="Izveštaj" Binding="{Binding Izvestaj}" />
                             <DataGridTextColumn Header="Lek" Binding="{Binding IDLeka}" />
                         </DataGrid.Columns>
                     </DataGrid>

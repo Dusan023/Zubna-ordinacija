@@ -68,5 +68,10 @@ namespace Zubna_Ordinacija_WPF.Prozori
             }
             dgPregledi.ItemsSource = pregledi;
         }
+
+        private void dgPregledi_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
