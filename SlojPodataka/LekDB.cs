@@ -36,6 +36,32 @@ namespace SlojPodataka
                         Naziv = reader["Naziv"].ToString(),
                         Proizvodjac = reader["Proizvodjac"].ToString(),
                         Jacina = reader["Jacina"].ToString(),
+                        Doziranje = reader["Doziranje"].ToString(),
+                        isDeleted = (bool)reader["isDeleted"],
+                });
+                }
+            }
+            return lekovi;
+        }
+
+        public List<Lek> GetAllActiveLek()
+        {
+
+            var lekovi = new List<Lek>();
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Lek where isDeleted=0", conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    lekovi.Add(new Lek
+                    {
+                        IDLeka = (int)reader["IDLeka"],
+                        Naziv = reader["Naziv"].ToString(),
+                        Proizvodjac = reader["Proizvodjac"].ToString(),
+                        Jacina = reader["Jacina"].ToString(),
                         Doziranje = reader["Doziranje"].ToString()
                     });
                 }
@@ -86,6 +112,17 @@ namespace SlojPodataka
                 SqlCommand cmd = new SqlCommand("DELETE FROM Lek WHERE IDLeka=@IDLeka", conn);
                 cmd.Parameters.AddWithValue("@IDLeka", id);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void SoftDelete(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE Lek SET isDeleted = 1 WHERE IDLeka = @IDLeka", conn);
+                cmd.Parameters.AddWithValue("@IDLeka", id);
+                int check = cmd.ExecuteNonQuery();
             }
         }
     }

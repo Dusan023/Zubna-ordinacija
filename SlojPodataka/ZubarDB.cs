@@ -35,13 +35,38 @@ namespace SlojPodataka //
                         Prezime = reader["Prezime"].ToString(),
                         JMBG = reader["JMBG"].ToString(),
                         BrojTelefona = reader["BrojTelefona"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        isDeleted = (bool)reader["isDeleted"]
+                });
+                }
+            }
+            return lista;
+        }
+
+        public List<Zubar> GetAllActiveZubar()
+        {
+            var lista = new List<Zubar>();
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Zubar where IsDeleted = 0", conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    lista.Add(new Zubar
+                    {
+                        IDZubara = (int)reader["IDZubara"],
+                        Ime = reader["Ime"].ToString(),
+                        Prezime = reader["Prezime"].ToString(),
+                        JMBG = reader["JMBG"].ToString(),
+                        BrojTelefona = reader["BrojTelefona"].ToString(),
                         Email = reader["Email"].ToString()
                     });
                 }
             }
             return lista;
         }
-
         public void Insert(Zubar zubar)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -97,7 +122,7 @@ namespace SlojPodataka //
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("UPDATE Zubar SET isDeleted = 1WHERE IDZubara = @IDZubara",conn);              
+                SqlCommand cmd = new SqlCommand("UPDATE Zubar SET isDeleted = 1 WHERE IDZubara = @IDZubara",conn);              
                 cmd.Parameters.AddWithValue("@IDZubara", id);
                int check =  cmd.ExecuteNonQuery();
             }

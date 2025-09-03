@@ -41,6 +41,8 @@ namespace SlojServisa
         }
         public void ObrisiPregled(int id) => _repo.Delete(id);
 
+        public bool ProveriAktivnostZubara(int id) => _repo.DaLiJeLekAktivan(id);
+
         public List<Pregled> DajSvePregledePacijenta(int id) => _repo.GetTerminiFromPacijent(id);
 
         internal Obavestenje PravilaZaDodavanjePreglede(Pregled pregled)

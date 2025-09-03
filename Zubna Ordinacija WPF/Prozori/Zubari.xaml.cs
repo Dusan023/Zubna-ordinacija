@@ -30,7 +30,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         public Zubari()
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _zubarRepo = new ZubarPravila();
             binDataGrid();
         }
@@ -58,7 +58,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void binDataGrid()
         {
-            DataGrid.ItemsSource = _zubarRepo.VratiSveZubare();
+            DataGrid.ItemsSource = _zubarRepo.VratiSveAktivneZubare();
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)

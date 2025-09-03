@@ -57,6 +57,16 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
                 ComboboxPacijent.SelectedValue = termin.IDPacijenta;
                 ComboboxZubar.SelectedValue = termin.IDZubara;
+
+                if(!_terminRepo.ProveriAktivnostZubara(termin.IDZubara))
+                {
+                    MessageBox.Show(
+                    "Trenutno je zubar neaktivan",
+                    "Informacija",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                }
             }
         }
 
@@ -131,9 +141,9 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ComboboxZubar_Loaded(object sender, RoutedEventArgs e)
         {
-            var zubari = _zubarRepo.VratiSveZubare();
-            var filter = zubari.FindAll(x => x.isDeleted == false);
-            ComboboxZubar.ItemsSource = zubari;
+            var AktivniZubari = _zubarRepo.VratiSveAktivneZubare();
+            //var filter = zubari.FindAll(x => x.isDeleted == false);
+            ComboboxZubar.ItemsSource = AktivniZubari;
             ComboboxZubar.DisplayMemberPath = "Ime";     // prikaz
             ComboboxZubar.SelectedValuePath = "IDZubara"; // vrednost
         }

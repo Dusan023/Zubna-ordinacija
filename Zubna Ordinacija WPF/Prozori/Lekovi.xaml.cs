@@ -54,7 +54,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private void binDataGrid()
         {
             LekPravila proveri = new LekPravila();
-            DataGrid.ItemsSource = proveri.VratiSveLekove();
+            
+            var lekovi = proveri.VratiSveAktivneLekove();
+
+            DataGrid.ItemsSource = lekovi;
+            DataGrid.Items.Refresh(); // Forsira prikaz novih vrednosti           // dodela nove liste
+
+
         }
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
@@ -114,6 +120,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
             int id = int.Parse(TextboxIdLeka.Text);
             LekPravila izbrisi = new LekPravila();
             izbrisi.ObrisiLek(id);
+            MessageBox.Show("Lek je deaktiviran");
             binDataGrid();
             ponistiUnosTxt();
         }

@@ -97,6 +97,8 @@ namespace SlojPodataka
             }
         }
 
+
+
         public List<Termin> GetTerminiFromPacijent(int ID)
         {
             var list = new List<Termin>();
@@ -124,6 +126,23 @@ namespace SlojPodataka
             }
             return list;
 
+        }
+
+        public bool DaLiJeZubarAktivan (int ID)
+        {
+            
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT 1 FROM Zubar where IDZubara=@IDZubara and IsDeleted=0", connection);
+                command.Parameters.AddWithValue("@IDZubara", ID);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    return reader.HasRows;
+                }
+            }
+            
         }
     }
 }

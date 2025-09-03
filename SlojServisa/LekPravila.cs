@@ -22,6 +22,8 @@ namespace SlojServisa
         }
 
         public List<Lek> VratiSveLekove() => _repo.GetAll();
+
+        public List<Lek> VratiSveAktivneLekove() => _repo.GetAllActiveLek();
         public Obavestenje DodajLek(Lek lek)
         {
             var ispravan = ProveraPodatakaZaLek(lek);
@@ -40,7 +42,7 @@ namespace SlojServisa
 
             return ispravan;
         }
-        public void ObrisiLek(int id) => _repo.Delete(id);
+        public void ObrisiLek(int id) => _repo.SoftDelete(id);
 
         internal Obavestenje ProveraPodatakaZaLek(Lek lek)
         {

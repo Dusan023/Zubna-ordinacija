@@ -47,8 +47,15 @@ namespace SlojServisa
 
         public List<Termin> DajSveTerminePacijenta(int id) => _repo.GetTerminiFromPacijent(id);
 
+        public bool ProveriAktivnostZubara(int id) => _repo.DaLiJeZubarAktivan(id);
+
         internal Obavestenje ProveraPodatakaZaTermin(Termin termin)
         {
+            if(!_repo.DaLiJeZubarAktivan(termin.IDZubara))
+            {
+                return new Obavestenje { Uspeh = false, Poruka = "Ne može da se unese taj zubar. Zubar nije aktivan" };
+            }
+
             if (termin.Datum < DateTime.Today)
                 return new Obavestenje { Uspeh = false, Poruka = "Ne može pregled u prošlom vremenu" };
 

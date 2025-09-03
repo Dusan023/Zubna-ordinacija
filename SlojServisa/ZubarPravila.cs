@@ -21,6 +21,8 @@ namespace SlojServisa //
         }
 
         public List<Zubar> VratiSveZubare() => _repo.GetAll();
+
+        public List<Zubar> VratiSveAktivneZubare() => _repo.GetAllActiveZubar();
         public Obavestenje DodajZubara(Zubar zubar)
         {
             var ispravan = ProveraPodatakaZaZubara(zubar);

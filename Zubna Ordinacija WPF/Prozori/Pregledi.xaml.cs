@@ -51,6 +51,16 @@ namespace Zubna_Ordinacija_WPF.Prozori
             TextboxIdPregleda.Text = pregled.IDPregleda.ToString();
             IzvestajTextBox.Text = pregled.Izvestaj;
             TextboxIdTermina.Text = pregled.IDTermina.ToString();
+
+            if (!_pregledRepo.ProveriAktivnostZubara(pregled.IDLeka))
+            {
+                MessageBox.Show(
+                "Selektovan lek je trenutno van upotrebe (neaktivan) neaktivan",
+                "Informacija",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            }
         }
         private void binDataGrid()
         {
@@ -119,7 +129,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private void ComboboxLek_Loaded(object sender, RoutedEventArgs e)
         {
             LekPravila pravila = new LekPravila();
-            var lekovi = pravila.VratiSveLekove(); // tvoj servisni sloj
+            var lekovi = pravila.VratiSveAktivneLekove(); // tvoj servisni sloj
 
             ComboboxLek.ItemsSource = lekovi;
             ComboboxLek.DisplayMemberPath = "Naziv";     // ono što vidi korisnik

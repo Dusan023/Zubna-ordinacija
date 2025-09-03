@@ -88,6 +88,8 @@ namespace SlojPodataka
             }
         }
 
+ 
+
         public List<Pregled> GetTerminiFromPacijent(int ID)
         {
             var list = new List<Pregled>();
@@ -143,6 +145,23 @@ namespace SlojPodataka
             }
 
             return termin;
+        }
+
+        public bool DaLiJeLekAktivan(int ID)
+        {
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT 1 FROM Lek where IDLeka=@IDLeka and IsDeleted=0", connection);
+                command.Parameters.AddWithValue("@IDLeka", ID);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    return reader.HasRows;
+                }
+            }
+
         }
 
     }
