@@ -55,7 +55,7 @@ namespace SlojServisa
             if (termin.Datum > DateTime.Today.AddYears(1))
                 return new Obavestenje { Uspeh = false, Poruka = "Ne može pregled da se zakaze vise od godinu dana" };
 
-            if (termin.Vreme.Hours <= 8 || termin.Vreme.Hours >= 21)
+            if (termin.Vreme.Hours < 8 || termin.Vreme.Hours > 21)
                 return new Obavestenje { Uspeh = false, Poruka = "Vreme mora biti u formatu HH:mm između 08:00 i 20:59." };
 
             if (string.IsNullOrWhiteSpace(termin.VrstaUsluge))
