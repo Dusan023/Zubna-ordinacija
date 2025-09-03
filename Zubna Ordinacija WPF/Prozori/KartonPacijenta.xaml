@@ -79,8 +79,16 @@
 
             <!-- Izveštaj -->
             <TabItem Header="Izveštaj">
-                <TextBox Name="txtIzvestaj" Margin="10" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                <StackPanel Margin="10">
+                    <Label Name="Objasnjenje"
+                    Content="Pritisnite na polje pregleda da se prikaže pregled izveštaja u polju Izveštaji" />
+                    <TextBox Name="txtIzvestaj"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap"/>
+                </StackPanel>
             </TabItem>
+
         </TabControl>
     </Grid>
 

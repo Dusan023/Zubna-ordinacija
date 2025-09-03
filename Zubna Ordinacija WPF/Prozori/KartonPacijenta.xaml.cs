@@ -30,7 +30,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private readonly PregledPravila _preglediRepo;
 
         private readonly Obavestenje Obavesti;
-        public RadnaPovršinaNaPacijenta()
+        public RadnaPovršinaNaPacijenta(string JMBG)
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -39,13 +39,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
             _terminiRepo = new TerminPravila();
             _preglediRepo = new PregledPravila();
             Obavesti = new Obavestenje();
-            binDataGrid();
+            binDataGrid(JMBG);
         }
 
-        private void binDataGrid()
+        private void binDataGrid(string nadjiPoJmbg)
         {
-            string x = "1234567890123";
-            var pacijent = _pacijentRepo.vratiPacijentaPoJmbg(x);
+            //string x = "1234567890123";
+            var pacijent = _pacijentRepo.vratiPacijentaPoJmbg(nadjiPoJmbg);
             ImeLabel.Content = "Ime: " + pacijent.Ime;
             PrezimeLabel.Content = "Prezime: " + pacijent.Prezime;
             JmbgLabel.Content = "JMBG: " + pacijent.JMBG;
@@ -55,9 +55,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
             TrudnocaLabel.Content = "Trudnoća: " + pacijent.Trudnoca;
             BrojZubaLabel.Content = "Broj zuba: " + pacijent.BrojZuba;
 
+           
+
             //Svi termini svih pacijenata;
             var termini= _terminiRepo.DajSveTerminePacijenta(pacijent.IDPacijenta);
             dgTermini.ItemsSource = termini;
+ 
             List<Pregled> pregledi = new List<Pregled>();
 
             // Svi termini svih pacijenata
@@ -67,11 +70,20 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 pregledi.AddRange(preglediTermina);
             }
             dgPregledi.ItemsSource = pregledi;
+
+            if (termini.Count == 0)
+            {
+                MessageBox.Show("Trenutno nema ništa uneto od termina i pregleda za ovog pacijenta", "Informacija", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
         }
 
         private void dgPregledi_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var pregled = dgPregledi.SelectedItem as Pregled;
+            if (pregled == null) return;
 
+            txtIzvestaj.SelectedText = pregled.Izvestaj;
         }
     }
 }

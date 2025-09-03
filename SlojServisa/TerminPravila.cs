@@ -55,6 +55,9 @@ namespace SlojServisa
             if (termin.Datum > DateTime.Today.AddYears(1))
                 return new Obavestenje { Uspeh = false, Poruka = "Ne može pregled da se zakaze vise od godinu dana" };
 
+            if(Regex.IsMatch(termin.Vreme.ToString(), @"^(?:[01]\d|2[0-3]):[0-5]\d$"))
+                return new Obavestenje { Uspeh = false, Poruka = "Vreme mora da se predstavi u ovom formatu hh:mm, npr: 10:15" };
+
             if (termin.Vreme.Hours < 8 || termin.Vreme.Hours > 21)
                 return new Obavestenje { Uspeh = false, Poruka = "Vreme mora biti u formatu HH:mm između 08:00 i 20:59." };
 
@@ -63,11 +66,12 @@ namespace SlojServisa
 
             var vremeNovogTermina = termin.Vreme;
             var datumNovogTermina = termin.Datum;
+            var IDZubara = termin.IDZubara;
 
             var zakazaniTermini = _repo.GetAll();
 
             bool postojiKonflikt = zakazaniTermini.Any(t =>
-                t.Datum == datumNovogTermina &&
+                t.Datum == datumNovogTermina && t.IDZubara == IDZubara &&
                 Math.Abs((t.Vreme - vremeNovogTermina).TotalMinutes) < 45);
 
             if (postojiKonflikt)

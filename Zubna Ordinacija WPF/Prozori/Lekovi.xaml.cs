@@ -89,7 +89,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
                 Doziranje = TextboxDoziranje.Text
             };
 
-            var poruka = _lekRepo.DodajLek(lek);
+            var poruka = _lekRepo.IzmeniLek(lek);
             if (!poruka.Uspeh)
             {
                 MessageBox.Show(poruka.Poruka);

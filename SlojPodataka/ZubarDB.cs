@@ -92,6 +92,17 @@ namespace SlojPodataka //
             }
         }
 
+        public void SoftDelete(int id)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("UPDATE Zubar SET isDeleted = 1WHERE IDZubara = @IDZubara",conn);              
+                cmd.Parameters.AddWithValue("@IDZubara", id);
+               int check =  cmd.ExecuteNonQuery();
+            }
+        }
+
         public bool checkIfJMBGExists(string JMBG)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -109,15 +120,32 @@ namespace SlojPodataka //
             }
         }
 
+        public bool checkIfEmailForZubarExists(string email)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT TOP 1 * FROM Zubar WHERE Email = @Email", conn);
+                cmd.Parameters.AddWithValue("@Email", email);
+                SqlDataReader nadjen = cmd.ExecuteReader();
+
+                if (nadjen.Read())
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
+
         public int GetAppointmentCountFromDentist(int id)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 int brojTermina = 0;
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Termini WHERE ZubarId = @ZubarId", conn);
+                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Termin WHERE IDZubara = @ZubarId", conn);
                 cmd.Parameters.AddWithValue("@ZubarId", id);
-                conn.Open();
+                
                 brojTermina = (int)cmd.ExecuteScalar();
 
                 return brojTermina;

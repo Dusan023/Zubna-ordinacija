@@ -61,7 +61,7 @@ namespace SlojServisa
                 return new Obavestenje { Uspeh = false, Poruka = "Jačina leka je obavezna." };
 
             if (!Regex.IsMatch(lek.Jacina, @"^[0-9]+(mg|g|ml|mcg)$"))
-                return new Obavestenje { Uspeh = false, Poruka = "Jačina mora biti broj sa opcionalnom jedinicom (npr. 500mg)." };
+                return new Obavestenje { Uspeh = false, Poruka = "Jačina mora biti broj sa opcionalnom jedinicom mg|g|ml|mcg (npr. 500mg)." };
 
             if (string.IsNullOrWhiteSpace(lek.Doziranje))
                 return new Obavestenje { Uspeh = false, Poruka = "Doziranje leka je obavezno." };

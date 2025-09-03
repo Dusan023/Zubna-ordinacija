@@ -14,5 +14,7 @@ namespace SlojPodataka.Klase
         public string JMBG { get; set; }
         public string BrojTelefona { get; set; }
         public string Email { get; set; }
+
+        public bool isDeleted { get; set; }
     }
 }

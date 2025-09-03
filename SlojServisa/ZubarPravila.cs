@@ -44,7 +44,7 @@ namespace SlojServisa //
             var ispravan = ProveraDaLiSeSmeObrisatiZubar(zubar);
 
             if (ispravan.Uspeh)
-                _repo.Delete(zubar.IDZubara);
+                _repo.SoftDelete(zubar.IDZubara);
 
             return ispravan;
         }
@@ -89,15 +89,19 @@ namespace SlojServisa //
             if (!Regex.IsMatch(zubar.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 return new Obavestenje { Uspeh = false, Poruka = "Email adresa nije validna." };
 
+            if(_repo.checkIfEmailForZubarExists(zubar.Email))
+                return new Obavestenje { Uspeh = false, Poruka = "Email za ovog zubara već postoji" };
+
+
             return new Obavestenje { Uspeh = true, Poruka = "Uspešno je dodat entitet" };
         }
 
         internal Obavestenje ProveraDaLiSeSmeObrisatiZubar(Zubar zubar)
         {
-            if (_repo.GetAppointmentCountFromDentist(zubar.IDZubara) > 0)
+            /*if (_repo.GetAppointmentCountFromDentist(zubar.IDZubara) > 0)
             {
                 return new Obavestenje { Uspeh = false, Poruka = "Moraju se svi zakazani termini rasporediti drugim zubarima da bi se ovaj zubar obrisao" };
-            }
+            }*/
 
             return new Obavestenje { Uspeh = true, Poruka = "Uspešno je obrisan zubar" };
         }

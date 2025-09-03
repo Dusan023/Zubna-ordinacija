@@ -49,7 +49,7 @@ namespace SlojServisa
                 return new Obavestenje
                 {
                     Uspeh = false,
-                    Poruka = "Datum sledeće pregleda ne može biti u prošlosti."
+                    Poruka = "Izvestaj mora da se napise!"
                 };
 
             if (pregled.IDTermina <= 0)
@@ -67,7 +67,7 @@ namespace SlojServisa
                     return new Obavestenje
                     {
                         Uspeh = false,
-                        Poruka = "Datum sledeće pregleda ne može biti u prošlosti."
+                        Poruka = "Ne postoji dati termin, proverite tabelu termini"
                     };
                 }
             }
