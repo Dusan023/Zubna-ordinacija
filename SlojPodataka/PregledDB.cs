@@ -33,7 +33,7 @@ namespace SlojPodataka
                         lista.Add(new Pregled
                         {
                             IDPregleda = (int)reader["IDPregleda"],
-                            DatumSledecePosete = (DateTime)reader["DatumSledecePosete"],
+                            Izvestaj = (string)reader["Izvestaj"],
                             IDTermina = (int)reader["IDTermina"],
                             IDLeka = (int)reader["IDLeka"]
                         });
@@ -50,9 +50,9 @@ namespace SlojPodataka
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "INSERT INTO Pregled(DatumSledecePosete, IDTermina, IDLeka) VALUES(@Datum, @Termin, @Lek)", connection);
+                    "INSERT INTO Pregled(Izvestaj, IDTermina, IDLeka) VALUES(@Datum, @Termin, @Lek)", connection);
 
-                command.Parameters.AddWithValue("@Datum", pregled.DatumSledecePosete);
+                command.Parameters.AddWithValue("@Datum", pregled.Izvestaj);
                 command.Parameters.AddWithValue("@Termin", pregled.IDTermina);
                 command.Parameters.AddWithValue("@Lek", pregled.IDLeka);
 
@@ -66,10 +66,10 @@ namespace SlojPodataka
             {
                 connection.Open();
                 var command = new SqlCommand(
-                    "UPDATE Pregled SET DatumSledecePosete=@Datum, IDTermina=@Termin, IDLeka=@Lek WHERE IDPregleda=@Id", connection);
+                    "UPDATE Pregled SET Izvestaj=@Izvestaj, IDTermina=@Termin, IDLeka=@Lek WHERE IDPregleda=@Id", connection);
 
                 command.Parameters.AddWithValue("@Id", pregled.IDPregleda);
-                command.Parameters.AddWithValue("@Datum", pregled.DatumSledecePosete);
+                command.Parameters.AddWithValue("@Izvestaj", pregled.Izvestaj);
                 command.Parameters.AddWithValue("@Termin", pregled.IDTermina);
                 command.Parameters.AddWithValue("@Lek", pregled.IDLeka);
 
@@ -104,7 +104,7 @@ namespace SlojPodataka
                         list.Add(new Pregled
                         {
                             IDPregleda = (int)reader["IDPregleda"],
-                            DatumSledecePosete = (DateTime)reader["DatumSledecePosete"],
+                            Izvestaj = (string)reader["Izvestaj"],
                             IDTermina = (int)reader["IDTermina"],
                             IDLeka = (int)reader["IDLeka"]
                         });

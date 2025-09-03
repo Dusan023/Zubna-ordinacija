@@ -49,7 +49,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
             // Popuni polja
             TextboxIdPregleda.Text = pregled.IDPregleda.ToString();
-            DatepickerDatumSledecePosete.SelectedDate = pregled.DatumSledecePosete;
+            IzvestajTextBox.Text = pregled.Izvestaj;
             TextboxIdTermina.Text = pregled.IDTermina.ToString();
         }
         private void binDataGrid()
@@ -61,7 +61,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         {
             var pregled = new Pregled
             {
-                DatumSledecePosete = DateTime.Parse(DatepickerDatumSledecePosete.Text),
+                Izvestaj = IzvestajTextBox.Text,
                 IDTermina = int.Parse(TextboxIdTermina.Text),
                 IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
             };
@@ -84,7 +84,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
             var pregled = new Pregled
             {
                 IDPregleda = int.Parse(TextboxIdPregleda.Text),
-                DatumSledecePosete = DateTime.Parse(DatepickerDatumSledecePosete.Text),
+                Izvestaj = IzvestajTextBox.Text,
                 IDTermina = int.Parse(TextboxIdTermina.Text),
                 IDLeka = Convert.ToInt32(ComboboxLek.SelectedValue)
             };
@@ -102,7 +102,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private void ponistiUnosTxt()
         {
             TextboxIdPregleda.Text = "";
-            DatepickerDatumSledecePosete.Text = "";
+            IzvestajTextBox.Text = "";
             TextboxIdTermina.Text = "";
             ComboboxLek.Text = "";
 

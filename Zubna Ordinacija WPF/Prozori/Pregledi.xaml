@@ -31,7 +31,7 @@
         <Image x:Name="LogoPacijenti" HorizontalAlignment="Left" Height="52" Margin="584,39,0,0" VerticalAlignment="Top" Width="54" Source="/Prozori/Logo.png"/>
         <Label x:Name="LabelaPacijenti" Content="Pregledi" HorizontalAlignment="Center" Margin="0,23,0,0" VerticalAlignment="Top" Height="84" Width="228" FontFamily="Garamond" FontSize="60" FontWeight="Bold"/>
         <Label x:Name="LabelaIdTermina" Content="ID Termina" HorizontalAlignment="Left" Margin="74,148,0,0" VerticalAlignment="Top" Foreground="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold"/>
-        <Label x:Name="LabelaDatumSledecePosete" Content="Datum sledeće posete" HorizontalAlignment="Left" Margin="198,148,0,0" VerticalAlignment="Top" Foreground="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold"/>
+        <Label x:Name="LabelaIzvestaj" Content="Izvestaj" HorizontalAlignment="Left" Margin="198,148,0,0" VerticalAlignment="Top" Foreground="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold"/>
         <Label x:Name="LabelaLek" Content="Lek" HorizontalAlignment="Left" Margin="417,148,0,0" VerticalAlignment="Top" Foreground="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold"/>
         <Button x:Name="ButtonDodaj" Content="Dodaj" Margin="924,179,420,551" Background="#FF9DF16A" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold" BorderBrush="Black" Click="ButtonDodaj_Click">
             <Button.Style>
@@ -118,13 +118,13 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Binding="{Binding IDPregleda}" Header="ID Pregleda" Width="*"/>
-                <DataGridTextColumn Binding="{Binding DatumSledecePosete}" Header="Datum sledeće posete" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Izvestaj}" Header="Izvestaj" Width="*"/>
                 <DataGridTextColumn Binding="{Binding IDTermina}" Header="ID Termina" Width="*"/>
                 <DataGridTextColumn Binding="{Binding IDLeka}" Header="ID Leka" Width="*"/>
 
             </DataGrid.Columns>
         </DataGrid>
-        <DatePicker x:Name="DatepickerDatumSledecePosete" HorizontalAlignment="Left" Margin="196,182,0,0" VerticalAlignment="Top" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FirstDayOfWeek="Monday" Height="31" Width="154"/>
+        <TextBox x:Name="IzvestajTextBox" HorizontalAlignment="Left" Margin="196,182,0,0" VerticalAlignment="Top" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" Height="31" Width="154"/>
         <ComboBox x:Name="ComboboxLek" HorizontalAlignment="Left" Margin="355,184,0,0" VerticalAlignment="Top" Width="155" Background="#FFFFF0A7" FontFamily="Yu Gothic UI Semibold" FontSize="14" FontWeight="Bold" Foreground="Black" Height="26" Loaded="ComboboxLek_Loaded"/>
 
     </Grid>

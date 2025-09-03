@@ -45,7 +45,7 @@ namespace SlojServisa
 
         internal Obavestenje PravilaZaDodavanjePreglede(Pregled pregled)
         {
-            if (string.IsNullOrWhiteSpace(pregled.DatumSledecePosete.ToString()))
+            if (string.IsNullOrWhiteSpace(pregled.Izvestaj.ToString()))
                 return new Obavestenje
                 {
                     Uspeh = false,

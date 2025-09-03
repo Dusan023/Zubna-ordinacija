@@ -42,7 +42,7 @@ namespace SlojServisa
 
         public void ObrisiTermin(int id)
         {
-            //xx
+            _repo.Delete(id);
         }
 
         public List<Termin> DajSveTerminePacijenta(int id) => _repo.GetTerminiFromPacijent(id);
@@ -55,11 +55,30 @@ namespace SlojServisa
             if (termin.Datum > DateTime.Today.AddYears(1))
                 return new Obavestenje { Uspeh = false, Poruka = "Ne može pregled da se zakaze vise od godinu dana" };
 
-            if (!Regex.IsMatch(termin.Vreme.ToString(), @"^(0[8-9]|1[0-9]|20):[0-5][0-9]$"))
+            if (termin.Vreme.Hours <= 8 || termin.Vreme.Hours >= 21)
                 return new Obavestenje { Uspeh = false, Poruka = "Vreme mora biti u formatu HH:mm između 08:00 i 20:59." };
 
             if (string.IsNullOrWhiteSpace(termin.VrstaUsluge))
                 return new Obavestenje { Uspeh = false, Poruka = "Morate da upisite sta ste radili!" };
+
+            var vremeNovogTermina = termin.Vreme;
+            var datumNovogTermina = termin.Datum;
+
+            var zakazaniTermini = _repo.GetAll();
+
+            bool postojiKonflikt = zakazaniTermini.Any(t =>
+                t.Datum == datumNovogTermina &&
+                Math.Abs((t.Vreme - vremeNovogTermina).TotalMinutes) < 45);
+
+            if (postojiKonflikt)
+            {
+                return new Obavestenje
+                {
+                    Uspeh = false,
+                    Poruka = "Već postoji termin na isti dan u razmaku manjem od 45 minuta."
+                };
+            }
+
 
             return new Obavestenje { Uspeh = true, Poruka = "Uspešno je dodat entitet" };
         }
