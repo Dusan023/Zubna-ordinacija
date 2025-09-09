@@ -223,12 +223,29 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void KartonButton_Click(object sender, RoutedEventArgs e)
         {
-         
-            var ProslediJMBG = TextboxJMBG.Text;
+            var proslediJMBG = TextboxJMBG.Text?.Trim();
 
-            var prozor = new RadnaPovršinaNaPacijenta(ProslediJMBG);
+            if (string.IsNullOrWhiteSpace(proslediJMBG))
+            {
+                MessageBox.Show("Morate uneti JMBG pacijenta.",
+                                "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
+            var pacijentRepo = new PacijentPravila();
+            var pacijent = pacijentRepo.vratiPacijentaPoJmbg(proslediJMBG);
+
+            if (pacijent == null)
+            {
+                MessageBox.Show("Pacijent sa unetim JMBG-om ne postoji u bazi.",
+                                "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Ako je sve ok – otvori karton
+            var prozor = new RadnaPovršinaNaPacijenta(proslediJMBG);
             prozor.Show();
         }
+
     }
 }
