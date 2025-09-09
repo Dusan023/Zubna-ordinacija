@@ -126,7 +126,14 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
-            var p = new SlojPodataka.Klase.Pacijenti
+
+            if (ValidirajUnos() == false)
+            {
+                MessageBox.Show("Molimo Vas da popunite polja za izmenu");
+                return;
+            }
+
+                var p = new SlojPodataka.Klase.Pacijenti
             {
                 IDPacijenta = Convert.ToInt32(TextboxIdPacijenta.Text),
                 Ime = TextboxIme.Text,
@@ -169,6 +176,11 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
+            if (TextboxIdPacijenta.Text.IsNullOrEmpty())
+            {
+                MessageBox.Show("Niste uneli ID");
+                return;
+            }
             int id = Convert.ToInt32(TextboxIdPacijenta.Text);
             _pacijentRepo.ObrisiPacijenta(id);
             binDataGrid();

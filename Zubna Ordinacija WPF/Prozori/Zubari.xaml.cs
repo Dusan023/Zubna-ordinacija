@@ -67,7 +67,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
             {
                 MessageBox.Show("Niste uneli sve podatke");
                 return;
-            };
+            }
 
             Zubar noviZubar = new Zubar
             {
@@ -103,6 +103,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
+
+            if (ValidirajUnosZubara() == false)
+            {
+                MessageBox.Show("Niste uneli sve podatke");
+                return;
+            }
+
             Zubar izmena = new Zubar
             {
                 IDZubara = Convert.ToInt32(TextboxIdZubara.Text),
@@ -135,6 +142,7 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
+
             Zubar obrisi = new Zubar
             {
                 IDZubara = Convert.ToInt32(TextboxIdZubara.Text),

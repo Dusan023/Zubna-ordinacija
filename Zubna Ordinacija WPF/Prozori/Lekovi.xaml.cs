@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.IdentityModel.Tokens;
 using SlojPodataka.Klase;
 using SlojServisa;
 
@@ -102,6 +103,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
+
+            if (ValidirajUnosLeka() == false)
+            {
+                MessageBox.Show("Niste uneli sve podatke o leku");
+                return;
+            }
+
             var lek = new Lek
             {
                 IDLeka = int.Parse(TextboxIdLeka.Text),
@@ -133,6 +141,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
+
+            if (TextboxIdLeka.Text.IsNullOrEmpty()) {
+                MessageBox.Show("Niste uneli ID");
+                return;
+            }
+
             int id = int.Parse(TextboxIdLeka.Text);
             LekPravila izbrisi = new LekPravila();
             izbrisi.ObrisiLek(id);

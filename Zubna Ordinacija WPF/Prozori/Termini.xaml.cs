@@ -137,8 +137,10 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {
+
             if (int.TryParse(TextboxIdTermina.Text, out int id))
             {
+
                 _terminRepo.ObrisiTermin(id);
                 MessageBox.Show("Podaci su uspešno obrisani!");
                 binDataGrid();
@@ -148,6 +150,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
+
+            if (ValidirajUnosTermina() == false)
+            {
+                MessageBox.Show("Niste uneli sve podatke za termin!");
+                return;
+            }
+
             var termin = new Termin
             {
                 IDTermina = int.Parse(TextboxIdTermina.Text),

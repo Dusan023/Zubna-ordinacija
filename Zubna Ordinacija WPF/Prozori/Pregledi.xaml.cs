@@ -108,6 +108,13 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {
+
+            if (ValidirajUnosPregleda() == false)
+            {
+                MessageBox.Show("Niste uneli sve podatke.");
+                return;
+            }
+
             var pregled = new Pregled
             {
                 IDPregleda = int.Parse(TextboxIdPregleda.Text),
