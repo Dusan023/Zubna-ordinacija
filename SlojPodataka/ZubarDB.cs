@@ -177,5 +177,32 @@ namespace SlojPodataka //
 
             }
         }
+
+        public Zubar findZubaraByID(int id)
+        {
+            Zubar zubar = null;
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Zubar WHERE IDZubara = @IDZubara", conn);
+                cmd.Parameters.AddWithValue("@IDZubara", id);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    zubar = new Zubar
+                    {
+                        IDZubara = (int)reader["IDZubara"],
+                        Ime = reader["Ime"].ToString(),
+                        Prezime = reader["Prezime"].ToString(),
+                        JMBG = reader["JMBG"].ToString(),
+                        BrojTelefona = reader["BrojTelefona"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        isDeleted = (bool)reader["isDeleted"]
+                    };
+                }
+            }
+            return zubar;
+        }   
     }
 }

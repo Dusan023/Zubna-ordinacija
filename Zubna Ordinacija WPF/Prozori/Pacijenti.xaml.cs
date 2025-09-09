@@ -78,6 +78,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
+            if(ValidirajUnos() == false)
+            {
+                MessageBox.Show("Molimo Vas da popunite sva polja za pacijenta.");
+                return;
+            }
+
             SlojPodataka.Klase.Pacijenti pacijent = new SlojPodataka.Klase.Pacijenti
             {
                 Ime = TextboxIme.Text,
@@ -100,6 +106,23 @@ namespace Zubna_Ordinacija_WPF.Prozori
             binDataGrid();
             ponistiUnosTxt();
         }
+
+        private bool ValidirajUnos()
+        {
+            // provera da li su polja prazna
+            if (string.IsNullOrWhiteSpace(TextboxIme.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxPrezime.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxJMBG.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxBrojTelefona.Text)) return false;
+            if (string.IsNullOrWhiteSpace(ComboboxPol.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxBrojZuba.Text)) return false;
+            if (!int.TryParse(TextboxBrojZuba.Text, out _)) return false;
+            if (ComboboxZubar.SelectedValue == null) return false;
+
+            // sve prošlo
+            return true;
+        }
+
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {

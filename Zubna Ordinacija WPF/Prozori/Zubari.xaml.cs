@@ -63,6 +63,12 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
+            if(ValidirajUnosZubara()==false)
+            {
+                MessageBox.Show("Niste uneli sve podatke");
+                return;
+            };
+
             Zubar noviZubar = new Zubar
             {
                 Ime = TextboxIme.Text,
@@ -81,6 +87,19 @@ namespace Zubna_Ordinacija_WPF.Prozori
             binDataGrid();
             ponistiUnosTxt();
         }
+
+        private bool ValidirajUnosZubara()
+        {
+            if (string.IsNullOrWhiteSpace(TextboxIme.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxPrezime.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxJMBG.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxBrojTelefona.Text)) return false;
+            if (string.IsNullOrWhiteSpace(TextboxEmail.Text)) return false;
+
+
+            return true;
+        }
+
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {

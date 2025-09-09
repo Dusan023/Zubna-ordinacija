@@ -69,6 +69,10 @@ namespace Zubna_Ordinacija_WPF.Prozori
 
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
+            if(ValidirajUnosPregleda()==false)
+            { MessageBox.Show("Niste uneli sve podatke ili su podaci neispravnog formata");
+                           return;}
+
             var pregled = new Pregled
             {
                 Izvestaj = IzvestajTextBox.Text,
@@ -88,6 +92,19 @@ namespace Zubna_Ordinacija_WPF.Prozori
             binDataGrid();
             ponistiUnosTxt();
         }
+
+        private bool ValidirajUnosPregleda()
+        {
+            if (string.IsNullOrWhiteSpace(IzvestajTextBox.Text)) return false;
+
+            if (string.IsNullOrWhiteSpace(TextboxIdTermina.Text)) return false;
+            if (!int.TryParse(TextboxIdTermina.Text, out _)) return false;
+
+            if (ComboboxLek.SelectedValue == null) return false;
+
+            return true;
+        }
+
 
         private void ButtonIzmeni_Click(object sender, RoutedEventArgs e)
         {

@@ -90,6 +90,11 @@ namespace Zubna_Ordinacija_WPF.Prozori
         private void ButtonDodaj_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show($"Pacijent: {ComboboxPacijent.SelectedValue}, Zubar: {ComboboxZubar.SelectedValue}");
+            if(ValidirajUnosTermina() == false)
+            {
+                MessageBox.Show("Niste uneli sve podatke za termin!");
+                return;
+            }
             var noviTermin = new Termin
             {
                 Datum = DateTime.Parse(DatepickerDatum.Text).Date,
@@ -108,6 +113,27 @@ namespace Zubna_Ordinacija_WPF.Prozori
             binDataGrid();
             ponistiUnosTxt();
         }
+
+        private bool ValidirajUnosTermina()
+        {
+            // Datum obavezan
+            if (string.IsNullOrWhiteSpace(DatepickerDatum.Text)) return false;
+            if (!DateTime.TryParse(DatepickerDatum.Text, out _)) return false;
+
+            // Vreme obavezno
+            if (string.IsNullOrWhiteSpace(TextboxVreme.Text)) return false;
+            if (!TimeSpan.TryParse(TextboxVreme.Text, out _)) return false;
+
+            // Vrsta usluge
+            if (string.IsNullOrWhiteSpace(TextboxVrstaUsluge.Text)) return false;
+
+            // Pacijent i zubar
+            if (ComboboxPacijent.SelectedValue == null) return false;
+            if (ComboboxZubar.SelectedValue == null) return false;
+
+            return true;
+        }
+
 
         private void ButtonObrisi_Click(object sender, RoutedEventArgs e)
         {

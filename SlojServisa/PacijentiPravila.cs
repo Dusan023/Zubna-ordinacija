@@ -76,11 +76,22 @@ namespace SlojServisa //
             else
             {
                 //ako odgovara paternu
-                Console.WriteLine(pacijent.JMBG.Length);
-                if (_repo.checkIfJMBGExists(pacijent.JMBG))
-                {
-                    return new Obavestenje { Uspeh = false, Poruka = "Osoba sa ovim JMBG:" + pacijent.JMBG + " već postoji" };
+                //Console.WriteLine(pacijent.JMBG.Length);
+
+                var postojeci_pacijent = _repo.findPacijentByID(pacijent.IDPacijenta);
+
+                if(postojeci_pacijent==null)
+                {  if (_repo.checkIfJMBGExists(pacijent.JMBG))
+                    {
+                        return new Obavestenje { Uspeh = false, Poruka = "Osoba sa ovim JMBG:" + pacijent.JMBG + " već postoji" };
+                    }
                 }
+
+                else if(postojeci_pacijent.JMBG != pacijent.JMBG && _repo.checkIfJMBGExists(pacijent.JMBG))
+                {              
+                        return new Obavestenje { Uspeh = false, Poruka = "Osoba sa ovim JMBG:" + pacijent.JMBG + " već postoji" };
+                }
+     
             }
 
             if (string.IsNullOrWhiteSpace(pacijent.BrojTelefona))

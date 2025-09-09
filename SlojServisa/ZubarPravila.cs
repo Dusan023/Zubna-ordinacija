@@ -73,11 +73,23 @@ namespace SlojServisa //
             else
             {
                 //ako odgovara paternu
-                Console.WriteLine(zubar.JMBG.Length);
-                if (_repo.checkIfJMBGExists(zubar.JMBG))
+                //Console.WriteLine(pacijent.JMBG.Length);
+
+                var postojeci_zubar = _repo.findZubaraByID(zubar.IDZubara);
+
+                if (postojeci_zubar == null)
+                {
+                    if (_repo.checkIfJMBGExists(zubar.JMBG))
+                    {
+                        return new Obavestenje { Uspeh = false, Poruka = "Osoba sa ovim JMBG:" + zubar.JMBG + " već postoji" };
+                    }
+                }
+
+                else if (postojeci_zubar.JMBG != zubar.JMBG && _repo.checkIfJMBGExists(zubar.JMBG))
                 {
                     return new Obavestenje { Uspeh = false, Poruka = "Osoba sa ovim JMBG:" + zubar.JMBG + " već postoji" };
                 }
+
             }
             if (string.IsNullOrWhiteSpace(zubar.BrojTelefona))
                 return new Obavestenje { Uspeh = false, Poruka = "Broj telefona zubara je obavezan." };
@@ -91,8 +103,23 @@ namespace SlojServisa //
             if (!Regex.IsMatch(zubar.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 return new Obavestenje { Uspeh = false, Poruka = "Email adresa nije validna." };
 
-            if(_repo.checkIfEmailForZubarExists(zubar.Email))
-                return new Obavestenje { Uspeh = false, Poruka = "Email za ovog zubara već postoji" };
+           /* if(_repo.checkIfEmailForZubarExists(zubar.Email))
+                return new Obavestenje { Uspeh = false, Poruka = "Email za ovog zubara već postoji" };*/
+
+            var proveri_email_zubara = _repo.findZubaraByID(zubar.IDZubara);
+
+            if (proveri_email_zubara == null)
+            {
+                if (_repo.checkIfEmailForZubarExists(zubar.Email))
+                {
+                    return new Obavestenje { Uspeh = false, Poruka = "Email za ovog zubara već postoji. Zubar koji ga ima je: " + proveri_email_zubara.IDZubara + " " + proveri_email_zubara.Ime + " " + proveri_email_zubara.Prezime };
+                }
+            }
+
+            else if (proveri_email_zubara.Email != zubar.Email && _repo.checkIfEmailForZubarExists(zubar.Email))
+            {
+                return new Obavestenje { Uspeh = false, Poruka = "Email za ovog zubara već postoji. Zubar koji ga ima je: " + proveri_email_zubara.IDZubara + " " + proveri_email_zubara.Ime + " " + proveri_email_zubara.Prezime };
+            }
 
 
             return new Obavestenje { Uspeh = true, Poruka = "Uspešno je dodat entitet" };
